@@ -1,0 +1,39 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>S/N</th>
+            <th>Question</th>
+            <th>Category</th>
+            <th>Choices</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of questionWrappers">
+            <td>{{item.questionId}}</td>
+            <td>{{item.text}}</td>
+            <td>{{item.categoryId}}</td>
+            <td>
+                <span class="badge" *ngFor="let choice of item.choice" [class.badge-green]="choice.choiceId == item.correctChoice.choiceId">{{choice.text}}</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<form class="form-inline">
+    <div class="form-group">
+        <label for="question">question</label>
+        <input type="text" class="form-control" id="question" #questiontext>
+    </div>
+    <div class="form-group">
+        <label for="category">Category</label>
+        <input type="text" class="form-control" id="category" value="simaa" #questioncategory readonly>
+    </div>
+    <div class="form-group">
+        <label for="choice">Choice</label>
+        <input type="text" class="form-control" id="choice" placeholder="; semicoln seperated" #questionchoice>
+    </div>
+    <div class="form-group">
+            <label for="correctChoice">Correct Choice</label>
+            <input type="text" class="form-control" id="correctChoice" value="" #questioncorrectchoice>
+        </div>
+    <button class="btn btn-default" (click)="addQuestion(questiontext.value, questioncategory.value, questionchoice.value, questioncorrectchoice.value)">Submit</button>
+</form>
