@@ -13,7 +13,7 @@
             <td>{{item.text}}</td>
             <td>{{item.categoryId}}</td>
             <td>
-                <span class="badge" *ngFor="let choice of item.choice" [class.badge-green]="choice.choiceId == item.correctChoice.choiceId">{{choice.text}}</span>
+                <span class="badge" *ngFor="let choice of item.choice" [class.green]="choice.choiceId == item.correctChoice.choiceId">{{choice.text}}</span>
             </td>
         </tr>
     </tbody>
