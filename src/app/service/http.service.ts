@@ -17,18 +17,30 @@ export class HTTPService {
         this.options = new RequestOptions({ headers: new Headers({ 'ZUMO-API-VERSION': '2.0.0' }) });
     }
 
+    /**
+     * returns all the questions from the database
+     */
     getAllQuestions(){
         return this.http.get(`${this.AzureUrl}/api/question`,this.options).toPromise().then(this.extractData);
     }
 
+    /**
+     * returns all the choices from the database
+     */
     getAllChoices(){
         return this.http.get(`${this.AzureUrl}/api/choice`,this.options).toPromise().then(this.extractData);
     }
 
+    /**
+     * returns all the correctChoices from the database
+     */
     getAllCorrectChoices(){
         return this.http.get(`${this.AzureUrl}/api/correctChoice`,this.options).toPromise().then(this.extractData);
     }
 
+    /**
+     * Returns questionWrapper that consisits of Question,Choices and CorrectChoice.
+     */
     getAllQuestionWrapper(): Promise<QuestionWrapper[]>  {
         var current = this;
         var questionWrappers = new Array<QuestionWrapper>();
@@ -75,6 +87,13 @@ export class HTTPService {
 
     }
 
+    /**
+     * 
+     * @param questionWrapper Adds a new wrapper to the database
+     * layer 1: Adds question to the database
+     * layer 2: It loops for the choices(because there has to be more than 1 choice) and add one by one to the database
+     * layer 3: It get the choiceId of the correctChoice and add that to the database.
+     */
     addQuestionWrapper(questionWrapper: QuestionWrapper): Promise<QuestionWrapper> 
     {
         return new Promise((resolve, reject) => {
@@ -107,7 +126,12 @@ export class HTTPService {
         });
     }
 
-
+    /**
+     * 
+     * @param text 
+     * @param category 
+     * it adds the text and category to the database
+     */
     addQuestion(text, category){
         return this.http.post(`${this.AzureUrl}/api/question`,{ text: text, categoryId: category},this.options).toPromise().then(this.extractData);
     }
