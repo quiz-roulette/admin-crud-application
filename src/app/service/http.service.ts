@@ -116,8 +116,23 @@ export class HTTPService {
         return this.http.post(`${this.AzureUrl}/api/choice`,{ text: text, questionId: questionId},this.options).toPromise().then(this.extractData);
     }
 
+    /**
+     * 
+     * @param questionId of which the correct choice is being entered.
+     * @param choiceId of which the correct question is being entered.
+     */
     addCorrectChoice(questionId, choiceId){
         return this.http.post(`${this.AzureUrl}/api/correctChoice`,{ questionId: questionId, choiceId: choiceId},this.options).toPromise().then(this.extractData);
+    }
+
+    /**
+     * 
+     * @param questionId the question id that needs to be deleted.
+     * It called a HTTP patch method, that contains a JSON object with attributes { questionId: 0, isDelete: true}.
+     * @example httpService.deleteQuestion(1).then((data) => { console.log("deleted Succesfully")});
+     */
+    deleteQuestion(questionId){
+        return this.http.patch(`${this.AzureUrl}/api/question`,{ questionId: questionId, isDelete: true},this.options).toPromise().then(this.extractData);
     }
 
     private extractData(res: Response) {
