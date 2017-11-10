@@ -18,15 +18,15 @@ export class HTTPService {
     }
 
     getAllQuestions(){
-        return this.http.get(`${this.AzureUrl}/tables/question`,this.options).toPromise().then(this.extractData);
+        return this.http.get(`${this.AzureUrl}/api/question`,this.options).toPromise().then(this.extractData);
     }
 
     getAllChoices(){
-        return this.http.get(`${this.AzureUrl}/tables/choice`,this.options).toPromise().then(this.extractData);
+        return this.http.get(`${this.AzureUrl}/api/choice`,this.options).toPromise().then(this.extractData);
     }
 
     getAllCorrectChoices(){
-        return this.http.get(`${this.AzureUrl}/tables/correctChoice`,this.options).toPromise().then(this.extractData);
+        return this.http.get(`${this.AzureUrl}/api/correctChoice`,this.options).toPromise().then(this.extractData);
     }
 
     getAllQuestionWrapper(): Promise<QuestionWrapper[]>  {
