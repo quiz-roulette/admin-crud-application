@@ -40,4 +40,7 @@ export class QuestionComponent implements OnInit {
         else
         console.log("test");
     }
+    deleteQuestion(text,category,choice,correctchoice){
+        console.log("test");
+    }
 }
