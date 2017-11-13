@@ -10,7 +10,7 @@ import { CorrectChoice } from '../model/CorrectChoice';
 
 @Injectable()
 export class HTTPService {
-    private AzureUrl = "https://arck9app.azurewebsites.net";
+    private AzureUrl = "https://axperienceapp.azurewebsites.net";
     options: any;
 
     constructor(private http: Http) { 
