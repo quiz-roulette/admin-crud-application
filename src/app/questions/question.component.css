@@ -5,3 +5,12 @@
 .green{
     background-color: green;
 }
+
+#delete{
+    color:white;
+    background-color: red;
+}
+
+#delete:hover{
+    background-color: darkred;
+}

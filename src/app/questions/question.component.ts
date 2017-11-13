@@ -40,7 +40,9 @@ export class QuestionComponent implements OnInit {
         else
         alert("Correct option not found the choices. Please ensure to use correct choice from the choices you wrote.");
     }
-    deleteQuestion(text,category,choice,correctchoice){
-        console.log("test");
+    deleteQuestion(questionId){
+        this.httpService.deleteQuestion(questionId).then((data) => {
+            alert("Delete Succesfully");
+        })
     }
 }
