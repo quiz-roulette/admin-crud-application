@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HTTPService } from '../service/http.service';
 import { QuestionWrapper } from '../model/questionWrapper';
 import { AzureService } from '../service/azure.service';
+import { Category } from '../model/category';
 
 @Component({
     selector: 'question',
@@ -11,7 +12,9 @@ import { AzureService } from '../service/azure.service';
 
 export class QuestionComponent implements OnInit {
     questionWrappers: QuestionWrapper[];
+    categories: Category[];
     isTrue: boolean;
+    selectedCategory: string;
     constructor(private httpService: HTTPService, private azureService: AzureService) { 
         this.isTrue = true;
     }
@@ -20,6 +23,11 @@ export class QuestionComponent implements OnInit {
         this.httpService.getAllQuestionWrapper().then((data) => {
             this.questionWrappers = data;
         })
+        this.httpService.getAllCategories().then((data) => {
+            this.categories = data;
+            console.log(this.categories);
+        })
+        this.selectedCategory = "simaa";
     }
 
     addQuestion(text,category,choice,correctchoice )
@@ -27,7 +35,7 @@ export class QuestionComponent implements OnInit {
         var questionWrapper = new QuestionWrapper();
         questionWrapper.Text = text;
         questionWrapper.setChoices(choice.split(";").map((item) => item.trim()));// = ;
-        questionWrapper.CategoryName = category;
+        questionWrapper.CategoryName = this.selectedCategory;
         var el = questionWrapper.choice.find((el) => el.text == correctchoice);
         if(el){
             questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.text == correctchoice);

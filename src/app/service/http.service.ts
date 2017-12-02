@@ -38,6 +38,9 @@ export class HTTPService {
         return this.http.get(`${this.AzureUrl}/api/correctChoice`,this.options).toPromise().then(this.extractData);
     }
 
+    getAllCategories(){
+        return this.http.get(`${this.AzureUrl}/api/category`,this.options).toPromise().then(this.extractData);
+    }
     /**
      * Returns questionWrapper that consisits of Question,Choices and CorrectChoice.
      */
