@@ -25,9 +25,9 @@ export class QuestionComponent implements OnInit {
     addQuestion(text,category,choice,correctchoice )
     {
         var questionWrapper = new QuestionWrapper();
-        questionWrapper.text = text;
+        questionWrapper.Text = text;
         questionWrapper.setChoices(choice.split(";").map((item) => item.trim()));// = ;
-        questionWrapper.categoryId = category;
+        questionWrapper.CategoryName = category;
         var el = questionWrapper.choice.find((el) => el.text == correctchoice);
         if(el){
             questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.text == correctchoice);

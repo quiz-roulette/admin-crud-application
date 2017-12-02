@@ -73,12 +73,13 @@ export class HTTPService {
 
             Promise.all(promises).then(function () {
                 questions.forEach(element => {
+                    console.log(element);
                     var questionWrapper: QuestionWrapper = new QuestionWrapper();
-                    questionWrapper.questionId = element.questionId;
-                    questionWrapper.text = element.text;
-                    questionWrapper.categoryId = element.categoryId;
-                    questionWrapper.choice = choices.filter((el) => el.questionId == element.questionId);
-                    questionWrapper.correctChoice = correctChoices.find((el) => el.questionId == questionWrapper.questionId);
+                    questionWrapper.QuestionId = element.QuestionId;
+                    questionWrapper.Text = element.Text;
+                    questionWrapper.CategoryName = element.CategoryName;
+                    questionWrapper.choice = choices.filter((el) => el.QuestionId == element.QuestionId);
+                    questionWrapper.correctChoice = correctChoices.find((el) => el.QuestionId == questionWrapper.QuestionId);
                     questionWrappers.push(questionWrapper);
                 });
                 resolve(questionWrappers);
@@ -98,21 +99,21 @@ export class HTTPService {
     {
         return new Promise((resolve, reject) => {
             try {
-                this.addQuestion(questionWrapper.text,questionWrapper.categoryId).then((question) => {
-                    questionWrapper.questionId = question.questionId;
+                this.addQuestion(questionWrapper.Text,questionWrapper.CategoryName).then((question) => {
+                    questionWrapper.QuestionId = question.questionId;
                     let promises = new Array<Promise<any>>();
                     questionWrapper.choice.forEach((element) => {
-                        let promise = this.addChoice(questionWrapper.questionId,element.text).then((choice) => {
-                            element.choiceId = choice.choiceId;
+                        let promise = this.addChoice(questionWrapper.QuestionId,element.text).then((choice) => {
+                            element.ChoiceId = choice.choiceId;
                         })
                         promises.push(promise);
                     })
                     Promise.all(promises).then((result) => {
                         questionWrapper.choice.forEach((element) => {
                            if(element.text == questionWrapper.correctChoiceText){
-                               this.addCorrectChoice(questionWrapper.questionId,element.choiceId).then((res) => {
-                                    questionWrapper.correctChoice.choiceId = element.choiceId;
-                                    questionWrapper.correctChoice.questionId = questionWrapper.questionId;
+                               this.addCorrectChoice(questionWrapper.QuestionId,element.ChoiceId).then((res) => {
+                                    questionWrapper.correctChoice.ChoiceId = element.ChoiceId;
+                                    questionWrapper.correctChoice.QuestionId = questionWrapper.QuestionId;
                                     resolve(questionWrapper);
                                })
                            }
