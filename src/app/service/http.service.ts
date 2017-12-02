@@ -160,7 +160,7 @@ export class HTTPService {
      * @example httpService.deleteQuestion(1).then((data) => { console.log("deleted Succesfully")});
      */
     deleteQuestion(questionId){
-        return this.http.patch(`${this.AzureUrl}/api/question`,{ questionId: questionId, isDelete: true},this.options).toPromise().then(this.extractData);
+        return this.http.patch(`${this.AzureUrl}/api/question`,{ QuestionId: questionId, IsDelete: true},this.options).toPromise().then(this.extractData);
     }
 
     private extractData(res: Response) {
