@@ -137,11 +137,11 @@ export class HTTPService {
      * it adds the text and category to the database
      */
     addQuestion(text, category){
-        return this.http.post(`${this.AzureUrl}/api/question`,{ text: text, categoryId: category},this.options).toPromise().then(this.extractData);
+        return this.http.post(`${this.AzureUrl}/api/question`,{ Text: text, CategoryName: category},this.options).toPromise().then(this.extractData);
     }
 
     addChoice(questionId, text){
-        return this.http.post(`${this.AzureUrl}/api/choice`,{ text: text, questionId: questionId},this.options).toPromise().then(this.extractData);
+        return this.http.post(`${this.AzureUrl}/api/choice`,{ Text: text, QuestionId: questionId},this.options).toPromise().then(this.extractData);
     }
 
     /**
