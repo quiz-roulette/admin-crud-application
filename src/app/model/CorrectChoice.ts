@@ -1,8 +1,8 @@
 export class CorrectChoice {
-    questionId: number;
-    choiceId: number;
+    QuestionId: number;
+    ChoiceId: number;
     constructor() {
-        this.questionId = 0;
-        this.choiceId = 0;
+        this.QuestionId = 0;
+        this.ChoiceId = 0;
     }
 }

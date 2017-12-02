@@ -1,11 +1,11 @@
 export class Question {
-    questionId: number;
+    QuestionId: number;
     text: string;
-    categoryId: string;
+    CategoryName: string;
 
     constructor() {
-        this.questionId = 0;
+        this.QuestionId = 0;
         this.text = "";
-        this.categoryId = "";
+        this.CategoryName = "";
     }
 }
