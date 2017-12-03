@@ -28,6 +28,12 @@
         </tr>
     </tbody>
 </table>
+<div class="input-group">
+    <input type="text" class="form-control" placeholder="Add the Image Link here.." aria-describedby="sizing-addon1">
+    <span class="input-group-addon" id="sizing-btn">Image
+        <button class="btn btn-xs btn-success" type="button">OK!</button>
+    </span>    
+</div>
 <form class="form-inline">
     <div class="form-group">
         <label for="question">Question</label>
@@ -41,13 +47,13 @@
     </div>
     <div class="form-group">
         <label for="choice">Choice</label>
-        <input type="text" class="form-control" id="choice" placeholder="; semicoln seperated" #questionchoice>
+        <input type="text" class="form-control" id="choice" placeholder=" Semicoln (;) seperated" #questionchoice>
     </div>
     <div class="form-group">
             <label for="correctChoice">Correct Choice</label>
             <input type="text" class="form-control" id="correctChoice" value="" #questioncorrectchoice>
         </div>
-    <button class="btn btn-default" (click)="addQuestion(questiontext.value, questioncategory.value, questionchoice.value, questioncorrectchoice.value)">
+    <button class="btn btn-success" (click)="addQuestion(questiontext.value, questioncategory.value, questionchoice.value, questioncorrectchoice.value)">
         <span class="glyphicon glyphicon-ok"></span>Submit
     </button>
 </form>
