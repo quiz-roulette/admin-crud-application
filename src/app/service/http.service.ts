@@ -103,17 +103,18 @@ export class HTTPService {
         return new Promise((resolve, reject) => {
             try {
                 this.addQuestion(questionWrapper.Text,questionWrapper.CategoryName).then((question) => {
-                    questionWrapper.QuestionId = question.questionId;
+                    console.log(question);
+                    questionWrapper.QuestionId = question.QuestionId;
                     let promises = new Array<Promise<any>>();
                     questionWrapper.choice.forEach((element) => {
-                        let promise = this.addChoice(questionWrapper.QuestionId,element.text).then((choice) => {
-                            element.ChoiceId = choice.choiceId;
+                        let promise = this.addChoice(questionWrapper.QuestionId,element.Text).then((choice) => {
+                            element.ChoiceId = choice.ChoiceId;
                         })
                         promises.push(promise);
                     })
                     Promise.all(promises).then((result) => {
                         questionWrapper.choice.forEach((element) => {
-                           if(element.text == questionWrapper.correctChoiceText){
+                           if(element.Text == questionWrapper.correctChoiceText){
                                this.addCorrectChoice(questionWrapper.QuestionId,element.ChoiceId).then((res) => {
                                     questionWrapper.correctChoice.ChoiceId = element.ChoiceId;
                                     questionWrapper.correctChoice.QuestionId = questionWrapper.QuestionId;
@@ -137,7 +138,7 @@ export class HTTPService {
      * it adds the text and category to the database
      */
     addQuestion(text, category){
-        return this.http.post(`${this.AzureUrl}/api/question`,{ Text: text, CategoryId: category},this.options).toPromise().then(this.extractData);
+        return this.http.post(`${this.AzureUrl}/api/question`,{ Text: text, CategoryName: category},this.options).toPromise().then(this.extractData);
     }
 
     addChoice(questionId, text){
@@ -150,7 +151,7 @@ export class HTTPService {
      * @param choiceId of which the correct question is being entered.
      */
     addCorrectChoice(questionId, choiceId){
-        return this.http.post(`${this.AzureUrl}/api/correctChoice`,{ questionId: questionId, choiceId: choiceId},this.options).toPromise().then(this.extractData);
+        return this.http.post(`${this.AzureUrl}/api/correctChoice`,{ QuestionId: questionId, ChoiceId: choiceId},this.options).toPromise().then(this.extractData);
     }
 
     /**

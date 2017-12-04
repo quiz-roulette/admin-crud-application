@@ -32,13 +32,14 @@ export class QuestionComponent implements OnInit {
 
     addQuestion(text,category,choice,correctchoice )
     {
+        alert(category);
         var questionWrapper = new QuestionWrapper();
         questionWrapper.Text = text;
         questionWrapper.setChoices(choice.split(";").map((item) => item.trim()));// = ;
         questionWrapper.CategoryName = this.selectedCategory;
-        var el = questionWrapper.choice.find((el) => el.text == correctchoice);
+        var el = questionWrapper.choice.find((el) => el.Text == correctchoice);
         if(el){
-            questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.text == correctchoice);
+            questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.Text == correctchoice);
             questionWrapper.correctChoiceText = correctchoice;
             this.httpService.addQuestionWrapper(questionWrapper).then((res) => {
                 this.questionWrappers.push(res);

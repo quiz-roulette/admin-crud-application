@@ -22,7 +22,7 @@ export class QuestionWrapper extends Question{
     setChoices(choices: string[]){
         choices.forEach(element => {
             var choice = new Choice();
-            choice.text = element;
+            choice.Text = element;
             this.choice.push(choice);
         });
     }
