@@ -17,39 +17,47 @@
             <td>
                 <span class="badge" *ngFor="let choice of item.choice" [class.green]="choice.ChoiceId == item.correctChoice.ChoiceId">{{choice.Text}}</span>
             </td>
-            <td><button type="button" id="delete" class="btn btn-default btn-sm" (click)="deleteQuestion(item.QuestionId)">
-                <span class="glyphicon glyphicon-ban-circle"></span> Delete
-              </button>
+            <td>
+                <button type="button" id="delete" class="btn btn-default btn-sm" (click)="deleteQuestion(item.QuestionId)">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Delete
+                </button>
             </td>
         </tr>
     </tbody>
 </table>
-<div class="input-group">
+<!-- <div class="input-group">
     <input type="text" class="form-control" placeholder="Add the Image Link here.." aria-describedby="sizing-addon1">
     <span class="input-group-addon" id="sizing-btn">Image
         <button class="btn btn-xs btn-success" type="button">OK!</button>
-    </span>    
-</div>
-<form class="form-inline">
-    <div class="form-group">
-        <label for="question">Question</label>
-        <input type="text" class="form-control" id="question" #questiontext>
-    </div>
-    <div class="form-group">
-        <label for="category">Category</label>
-        <select class="form-control" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}" #questioncategory>
-            <option *ngFor="let x of categories" [value]="x.CategoryName" [selected]="selectedCategory == x.CategoryName">{{x.CategoryName}}</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="choice">Choice</label>
-        <input type="text" class="form-control" id="choice" placeholder=" Semicoln (;) seperated" #questionchoice>
-    </div>
-    <div class="form-group">
+    </span>
+</div> -->
+<div class="card form">
+    <div class="card-block">
+        <h4 class="card-title">Add New Question</h4>
+        <div class="form-group">
+            <label for="question">Question</label>
+            <input type="text" class="form-control"  placeholder="Add question text here" id="question" #questiontext>
+        </div>
+        <div class="form-group">
+            <label for="question">Question Image</label>
+            <input type="text" class="form-control" placeholder="Add the Image Link here.." aria-describedby="sizing-addon1">
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select class="form-control" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}" #questioncategory>
+                <option *ngFor="let x of categories" [value]="x.CategoryName" [selected]="selectedCategory == x.CategoryName">{{x.CategoryName}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="choice">Choice</label>
+            <input type="text" class="form-control" id="choice" placeholder=" Semicoln (;) seperated" #questionchoice>
+        </div>
+        <div class="form-group">
             <label for="correctChoice">Correct Choice</label>
             <input type="text" class="form-control" id="correctChoice" value="" #questioncorrectchoice>
         </div>
-    <button class="btn btn-success" (click)="addQuestion(questiontext.value, questioncategory.value, questionchoice.value, questioncorrectchoice.value)">
-        <span class="glyphicon glyphicon-ok"></span>&nbsp;Submit
-    </button>
-</form>
+        <button class="btn btn-success" (click)="addQuestion(questiontext.value, questioncategory.value, questionchoice.value, questioncorrectchoice.value)">
+            <span class="glyphicon glyphicon-ok"></span>&nbsp;Submit
+        </button>
+    </div>
+</div>

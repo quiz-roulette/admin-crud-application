@@ -10,6 +10,7 @@
     animation-name: slide;
     animation-fill-mode: forwards;
     animation-duration: 1s;
+    margin-top: 20px;
 }
 
 @-webkit-keyframes slide {

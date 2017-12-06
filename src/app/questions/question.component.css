@@ -19,4 +19,12 @@
     display: block;
     height: 500px;
     overflow-y: scroll;
+    width: 100%;
+}
+
+.form{
+    display: block;
+    height: 200px;
+    overflow-y: scroll;
+    text-align: center;
 }
