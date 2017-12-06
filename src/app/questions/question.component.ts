@@ -3,6 +3,7 @@ import { HTTPService } from '../service/http.service';
 import { QuestionWrapper } from '../model/questionWrapper';
 import { AzureService } from '../service/azure.service';
 import { Category } from '../model/category';
+import { Result } from '../model/Result';
 
 @Component({
     selector: 'question',
@@ -15,14 +16,20 @@ export class QuestionComponent implements OnInit {
     categories: Category[];
     isTrue: boolean;
     selectedCategory: string;
+    result: Result;
+
     constructor(private httpService: HTTPService, private azureService: AzureService) { 
         this.isTrue = true;
+        this.result = new Result();
     }
 
     ngOnInit() { 
+        this.result.updateInfo("Getting questions...");
         this.httpService.getAllQuestionWrapper().then((data) => {
             this.questionWrappers = data;
+            this.result.updateSuccess(true);
         })
+
         this.httpService.getAllCategories().then((data) => {
             this.categories = data;
             console.log(this.categories);
@@ -32,7 +39,7 @@ export class QuestionComponent implements OnInit {
 
     addQuestion(text,category,choice,correctchoice )
     {
-        alert(category);
+        this.result.updateInfo("Adding question...");
         var questionWrapper = new QuestionWrapper();
         questionWrapper.Text = text;
         questionWrapper.setChoices(choice.split(";").map((item) => item.trim()));// = ;
@@ -43,15 +50,16 @@ export class QuestionComponent implements OnInit {
             questionWrapper.correctChoiceText = correctchoice;
             this.httpService.addQuestionWrapper(questionWrapper).then((res) => {
                 this.questionWrappers.push(res);
-                alert("Successfully Added");
+                this.result.updateTextSuccess("Added Question: "+questionWrapper.Text);
             }).catch((err) => alert(err))
         }
         else
-        alert("Correct option not found the choices. Please ensure to use correct choice from the choices you wrote.");
+        this.result.updateError("Correct option not found the choices. Please ensure to use correct choice from the choices you wrote.");
     }
     deleteQuestion(questionId){
+        this.result.updateInfo("Deleting question...");
         this.httpService.deleteQuestion(questionId).then((data) => {
-            alert("Delete Succesfully");
+            this.result.updateTextSuccess("Deleted Question");
         })
     }
 }
