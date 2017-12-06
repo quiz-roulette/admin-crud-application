@@ -62,4 +62,8 @@ export class QuestionComponent implements OnInit {
             this.result.updateTextSuccess("Deleted Question");
         })
     }
+
+    updateResult(updatedResult: Result){
+        this.result = updatedResult;
+    }
 }
