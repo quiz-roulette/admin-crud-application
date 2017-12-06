@@ -1,0 +1,11 @@
+<div class="alert alert-success" *ngIf="result.success || result.textSuccess != null">
+    <strong *ngIf="result.success">Success!</strong>
+    <strong *ngIf="result.textSuccess != '' || result.textSuccess != null">{{result.textSuccess}}</strong>
+</div>
+<div class="alert alert-info" *ngIf="result.info">
+    <strong>{{result.info}}</strong>
+</div>
+<div class="alert alert-danger" *ngIf="result.error">
+    <span class="close" (click)="hideError()">&times;</span>
+    <strong>{{result.error}}</strong>
+</div>
