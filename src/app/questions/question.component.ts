@@ -4,6 +4,7 @@ import { QuestionWrapper } from '../model/questionWrapper';
 import { AzureService } from '../service/azure.service';
 import { Category } from '../model/category';
 import { Result } from '../model/Result';
+import * as $ from 'jquery';
 
 @Component({
     selector: 'question',
@@ -21,6 +22,10 @@ export class QuestionComponent implements OnInit {
     constructor(private httpService: HTTPService, private azureService: AzureService) { 
         this.isTrue = true;
         this.result = new Result();
+
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+          })
     }
 
     ngOnInit() { 
@@ -30,10 +35,7 @@ export class QuestionComponent implements OnInit {
             this.result.updateSuccess(true);
         })
 
-        this.httpService.getAllCategories().then((data) => {
-            this.categories = data;
-            console.log(this.categories);
-        })
+        
         this.selectedCategory = "simaa";
     }
 

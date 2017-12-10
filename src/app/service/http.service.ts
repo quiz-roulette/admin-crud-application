@@ -115,6 +115,7 @@ export class HTTPService {
                     Promise.all(promises).then((result) => {
                         questionWrapper.choice.forEach((element) => {
                            if(element.Text == questionWrapper.correctChoiceText){
+                               console.log(questionWrapper.QuestionId,element.ChoiceId);
                                this.addCorrectChoice(questionWrapper.QuestionId,element.ChoiceId).then((res) => {
                                     questionWrapper.correctChoice.ChoiceId = element.ChoiceId;
                                     questionWrapper.correctChoice.QuestionId = questionWrapper.QuestionId;

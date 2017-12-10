@@ -8,12 +8,14 @@ import { QuestionComponent } from './questions/question.component';
 import { Http, HttpModule } from '@angular/http';
 import { AzureService } from './service/azure.service';
 import { StatusComponent } from './component/status/status.component';
+import { AddQuestionComponent } from './questions/add-question/add-question.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     QuestionComponent,
-    StatusComponent
+    StatusComponent,
+    AddQuestionComponent
   ],
   imports: [
     BrowserModule,

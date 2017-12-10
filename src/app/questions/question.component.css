@@ -22,9 +22,10 @@
     width: 100%;
 }
 
-.form{
-    display: block;
-    height: 200px;
-    overflow-y: scroll;
-    text-align: center;
+.search{
+    padding: 20px;
+}
+
+.modal-title{
+    display: inline-block;
 }

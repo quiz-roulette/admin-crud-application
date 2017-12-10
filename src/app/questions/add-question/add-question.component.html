@@ -1,0 +1,26 @@
+<status [result]="result" (updatedResult)="updateResult($event)"></status>
+<div class="form-group">
+    <label for="question">Question</label>
+    <input type="text" class="form-control" placeholder="Add question text here" id="question" #questiontext>
+</div>
+<div class="form-group">
+    <label for="question">Question Image</label>
+    <input type="text" class="form-control" placeholder="Add the Image Link here.." aria-describedby="sizing-addon1" #questionimageurl>
+</div>
+<div class="form-group">
+    <label for="category">Category</label>
+    <select class="form-control" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}" #questioncategory>
+        <option *ngFor="let x of categories" [value]="x.CategoryName" [selected]="selectedCategory == x.CategoryName">{{x.CategoryName}}</option>
+    </select>
+</div>
+<div class="form-group">
+    <label for="choice">Choice</label>
+    <input type="text" class="form-control" id="choice" placeholder=" Semicoln (;) seperated" #questionchoice>
+</div>
+<div class="form-group">
+    <label for="correctChoice">Correct Choice</label>
+    <input type="text" class="form-control" id="correctChoice" value="" #questioncorrectchoice>
+</div>
+<button class="btn btn-success" (click)="addQuestion(questiontext.value, questionimageurl.value, questioncategory.value, questionchoice.value, questioncorrectchoice.value)">
+    <span class="glyphicon glyphicon-ok"></span>&nbsp;Submit
+</button>
