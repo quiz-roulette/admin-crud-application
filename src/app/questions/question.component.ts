@@ -18,11 +18,12 @@ export class QuestionComponent implements OnInit {
     isTrue: boolean;
     selectedCategory: string;
     result: Result;
+    searchText: string;
 
     constructor(private httpService: HTTPService, private azureService: AzureService) { 
         this.isTrue = true;
         this.result = new Result();
-
+        this.searchText = "";
         $('#myModal').on('shown.bs.modal', function () {
             $('#myInput').trigger('focus')
           })
