@@ -37,13 +37,14 @@ export class QuestionComponent implements OnInit {
         this.selectedCategory = "simaa";
     }
 
-    addQuestion(text,category,choice,correctchoice )
+    addQuestion(text,imageurl, category,choice,correctchoice )
     {
         this.result.updateInfo("Adding question...");
         var questionWrapper = new QuestionWrapper();
         questionWrapper.Text = text;
         questionWrapper.setChoices(choice.split(";").map((item) => item.trim()));// = ;
         questionWrapper.CategoryName = this.selectedCategory;
+        questionWrapper.ImageUrl = imageurl;
         var el = questionWrapper.choice.find((el) => el.Text == correctchoice);
         if(el){
             questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.Text == correctchoice);
