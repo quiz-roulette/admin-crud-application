@@ -8,23 +8,30 @@ import { QuestionComponent } from './questions/question.component';
 import { Http, HttpModule } from '@angular/http';
 import { AzureService } from './service/azure.service';
 import { StatusComponent } from './component/status/status.component';
+import {AppRoutingModule, routableComponents } from './app-routing.module';
 import { AddQuestionComponent } from './questions/add-question/add-question.component';
 import { PipeModule } from './app-pipe.module';
+import { AuthenticationComponent } from './authentication/authentication.component';
+import { UserGuard } from './guard/User.guard';
 
 @NgModule({
   declarations: [
     AppComponent,
-    QuestionComponent,
-    StatusComponent,
-    AddQuestionComponent
+    routableComponents,
+    AddQuestionComponent,
+    StatusComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
     FormsModule,
+    AppRoutingModule,
     PipeModule.forRoot()
   ],
-  providers: [HTTPService,AzureService],
+  providers: [
+    HTTPService,
+    AzureService,
+    UserGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
