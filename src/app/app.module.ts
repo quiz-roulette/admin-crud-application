@@ -8,17 +8,21 @@ import { QuestionComponent } from './questions/question.component';
 import { Http, HttpModule } from '@angular/http';
 import { AzureService } from './service/azure.service';
 import { StatusComponent } from './component/status/status.component';
+import { AddQuestionComponent } from './questions/add-question/add-question.component';
+import { PipeModule } from './app-pipe.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     QuestionComponent,
-    StatusComponent
+    StatusComponent,
+    AddQuestionComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    FormsModule
+    FormsModule,
+    PipeModule.forRoot()
   ],
   providers: [HTTPService,AzureService],
   bootstrap: [AppComponent]
