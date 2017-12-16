@@ -31,8 +31,8 @@ export class CategoryComponent implements OnInit {
         })
     }
 
-    addAddCategory(){
-        this.result.updateInfo("Adding User...");
+    addCategory(){
+        this.result.updateInfo("Adding Category...");
         this.httpService.addCategory(this.newCategory).then((result) => {
             if(result){
                 this.categories.push(this.newCategory);
@@ -43,11 +43,11 @@ export class CategoryComponent implements OnInit {
     }
 
     deleteCategory(categoryName){
-            this.result.updateInfo("Deleting User...");
+            this.result.updateInfo("Deleting Category...");
             this.httpService.deleteCategory(categoryName).then((result) => {
                 if(result){
                     this.result.updateTextSuccess("Deleted User Successfully");
-                    this.addAddCategory();
+                    this.getAllCategories();
                 }
             })
     }

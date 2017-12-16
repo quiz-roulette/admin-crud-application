@@ -1,34 +1,21 @@
 <status [result]="result" (updatedResult)="updateResult($event)"></status>
 <form class="form-inline adduser">
     <div class="form-group">
-      <label for="exampleInputName2">Name</label>
-      <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe" [(ngModel)]="newQuizUser.QuizUserId" name="quizUserId">
+      <label for="exampleInputName2">Category Name</label>
+      <input type="text" class="form-control" id="exampleInputName2" placeholder="Round 1" [(ngModel)]="newCategory.CategoryName" name="categoryName">
     </div>
-    <div class="form-group">
-      <label for="exampleInputEmail2">Password</label>
-      <input type="text" class="form-control" id="exampleInputEmail2" placeholder="any" [(ngModel)]="newQuizUser.Password" name="quizuserpassword">
-    </div>
-    <div class="checkbox">
-        <label>
-          <input type="checkbox" [(ngModel)]="newQuizUser.IsAdmin" name="quizuseradmin"> Admin
-        </label>
-      </div>
-    <button type="submit" class="btn btn-default" (click)="addUser()">Add</button>
+    <button type="submit" class="btn btn-default" (click)="addCategory()">Add</button>
   </form>
 <table class="table">
     <thead>
         <th>Name</th>
-        <th>Password</th>
-        <th>Admin</th>
-        <th>Action</th>
+        <th>Action <span class="label label-danger">Any Question in category will be deleted!</span></th>
     </thead>
     <tbody>
-        <tr *ngFor="let item of quizUsers">
-            <td>{{item.QuizUserId}}</td>
-            <td>{{item.Password}}</td>
-            <td>{{item.IsAdmin}}</td>
+        <tr *ngFor="let item of categories">
+            <td>{{item.CategoryName}}</td>
             <td>
-                <button type="button" id="delete" class="btn btn-default btn-sm" (click)="deleteUser(item.QuizUserId)">
+                <button type="button" id="delete" class="btn btn-default btn-sm" (click)="deleteCategory(item.CategoryName)">
                     <span class="glyphicon glyphicon-ban-circle"></span> Delete
                 </button>
             </td>
