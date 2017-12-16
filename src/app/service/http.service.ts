@@ -108,7 +108,7 @@ export class HTTPService {
     {
         return new Promise((resolve, reject) => {
             try {
-                this.addQuestion(questionWrapper.Text,questionWrapper.CategoryName).then((question) => {
+                this.addQuestion(questionWrapper.Text,questionWrapper.CategoryName,questionWrapper.ImageUrl).then((question) => {
                     console.log(question);
                     questionWrapper.QuestionId = question.QuestionId;
                     let promises = new Array<Promise<any>>();
@@ -144,8 +144,8 @@ export class HTTPService {
      * @param category 
      * it adds the text and category to the database
      */
-    addQuestion(text, category){
-        return this.http.post(`${this.AzureUrl}/api/question`,{ Text: text, CategoryName: category},this.options).toPromise().then(this.extractData);
+    addQuestion(text, category, imageUrl){
+        return this.http.post(`${this.AzureUrl}/api/question`,{ Text: text, CategoryName: category, ImageUrl: imageUrl},this.options).toPromise().then(this.extractData);
     }
 
     addChoice(questionId, text){
