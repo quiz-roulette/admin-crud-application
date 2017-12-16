@@ -1,0 +1,13 @@
+.authentication
+{
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.wrong-input input:focus{ 
+    background-color: yellow;
+}
+
+.tab{
+    padding-top: 50px;
+}

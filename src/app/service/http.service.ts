@@ -11,7 +11,13 @@ import { CorrectChoice } from '../model/CorrectChoice';
 @Injectable()
 export class HTTPService {
     private AzureUrl = "https://axperienceapp.azurewebsites.net";
-    options: any;
+    options: any;    
+    
+    Login(quizUserId, password): any {
+        console.log(quizUserId,password);
+        return this.http.get(`${this.AzureUrl}/api/authenticate?userId=${quizUserId}&userPassword=${password}&isAdmin=${true}`,this.options).toPromise().then(this.extractData);
+    }
+
 
     constructor(private http: Http) { 
         this.options = new RequestOptions({ headers: new Headers({ 'ZUMO-API-VERSION': '2.0.0' }) });
@@ -167,6 +173,7 @@ export class HTTPService {
 
     private extractData(res: Response) {
         let body = res.json();
+        console.log(body);
         return body || {};
     }
 
