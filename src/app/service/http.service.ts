@@ -87,6 +87,7 @@ export class HTTPService {
                     questionWrapper.QuestionId = element.QuestionId;
                     questionWrapper.Text = element.Text;
                     questionWrapper.CategoryName = element.CategoryName;
+                    questionWrapper.ImageUrl = element.ImageUrl;
                     questionWrapper.choice = choices.filter((el) => el.QuestionId == element.QuestionId);
                     questionWrapper.correctChoice = correctChoices.find((el) => el.QuestionId == questionWrapper.QuestionId);
                     questionWrappers.push(questionWrapper);

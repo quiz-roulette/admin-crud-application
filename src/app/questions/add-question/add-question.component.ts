@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Result } from '../../model/Result';
 import { QuestionWrapper } from '../../model/questionWrapper';
 import { HTTPService } from '../../service/http.service';
 import { Category } from '../../model/category';
+
 
 @Component({
     selector: 'add-question',
@@ -13,6 +14,7 @@ export class AddQuestionComponent implements OnInit {
     selectedCategory: string;
     result: Result;
     categories: Category[];
+    @Output() addedQuestion =  new EventEmitter();
     
     constructor(private httpService:HTTPService) {
         this.result = new Result();
@@ -39,7 +41,7 @@ export class AddQuestionComponent implements OnInit {
             questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.Text == correctchoice);
             questionWrapper.correctChoiceText = correctchoice;
             this.httpService.addQuestionWrapper(questionWrapper).then((res) => {
-                //Emit QuestionWrapper
+                this.addedQuestion.emit("true");
                 this.result.updateTextSuccess("Added Question: "+questionWrapper.Text);
             }).catch((err) => alert(err))
         }

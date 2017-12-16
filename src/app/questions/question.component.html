@@ -13,6 +13,7 @@
         <tr>
             <th>S/N</th>
             <th>Question</th>
+            <th>Image</th>
             <th>Category</th>
             <th>Choices</th>
             <td>Action</td>
@@ -22,6 +23,7 @@
         <tr *ngFor="let item of questionWrappers | search: [searchText]; let i = index ">
             <td>{{i+1}}</td>
             <td>{{item.Text}}</td>
+            <td >{{item.ImageUrl}}</td>
             <td>{{item.CategoryName}}</td>
             <td>
                 <span class="badge" *ngFor="let choice of item.choice" [class.green]="choice.ChoiceId == item.correctChoice.ChoiceId">{{choice.Text}}</span>
@@ -48,7 +50,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <add-question></add-question>
+          <add-question (addedQuestion)="addedQuestion($event)"></add-question>
         </div>
       </div>
     </div>

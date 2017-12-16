@@ -31,13 +31,18 @@ export class QuestionComponent implements OnInit {
 
     ngOnInit() { 
         this.result.updateInfo("Getting questions...");
+        this.getAllQuestions();
+
+        
+        this.selectedCategory = "simaa";
+    }
+
+    getAllQuestions(){
+        this.result.updateInfo("Getting questions...");
         this.httpService.getAllQuestionWrapper().then((data) => {
             this.questionWrappers = data;
             this.result.updateSuccess(true);
         })
-
-        
-        this.selectedCategory = "simaa";
     }
 
     addQuestion(text,imageurl, category,choice,correctchoice )
@@ -69,5 +74,9 @@ export class QuestionComponent implements OnInit {
 
     updateResult(updatedResult: Result){
         this.result = updatedResult;
+    }
+
+    addedQuestion(result){
+        this.getAllQuestions();
     }
 }
