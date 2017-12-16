@@ -5,11 +5,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { QuestionComponent } from './questions/question.component';
 import { UserGuard } from './guard/User.guard';
+import { UserComponent } from './component/users/user.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
   { path: '', component: AuthenticationComponent },
-  { path: 'questions', component: QuestionComponent, canActivate:[UserGuard] }
+  { path: 'questions', component: QuestionComponent, canActivate:[UserGuard] },
+  { path: 'users', component: UserComponent, canActivate:[UserGuard] }
 ];
 
 @NgModule({
@@ -20,5 +22,6 @@ export class AppRoutingModule { }
 
 export const routableComponents = [
     AuthenticationComponent,
-    QuestionComponent
+    QuestionComponent,
+    UserComponent
 ];
