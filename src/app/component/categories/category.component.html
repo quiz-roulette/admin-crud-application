@@ -1,0 +1,37 @@
+<status [result]="result" (updatedResult)="updateResult($event)"></status>
+<form class="form-inline adduser">
+    <div class="form-group">
+      <label for="exampleInputName2">Name</label>
+      <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe" [(ngModel)]="newQuizUser.QuizUserId" name="quizUserId">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail2">Password</label>
+      <input type="text" class="form-control" id="exampleInputEmail2" placeholder="any" [(ngModel)]="newQuizUser.Password" name="quizuserpassword">
+    </div>
+    <div class="checkbox">
+        <label>
+          <input type="checkbox" [(ngModel)]="newQuizUser.IsAdmin" name="quizuseradmin"> Admin
+        </label>
+      </div>
+    <button type="submit" class="btn btn-default" (click)="addUser()">Add</button>
+  </form>
+<table class="table">
+    <thead>
+        <th>Name</th>
+        <th>Password</th>
+        <th>Admin</th>
+        <th>Action</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of quizUsers">
+            <td>{{item.QuizUserId}}</td>
+            <td>{{item.Password}}</td>
+            <td>{{item.IsAdmin}}</td>
+            <td>
+                <button type="button" id="delete" class="btn btn-default btn-sm" (click)="deleteUser(item.QuizUserId)">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Delete
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

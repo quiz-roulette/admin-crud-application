@@ -8,16 +8,21 @@ import { Question } from '../model/question';
 import { Choice } from '../model/choice';
 import { CorrectChoice } from '../model/CorrectChoice';
 import { QuizUser } from '../model/QuizUser';
+import { Category } from '../model/category';
 
 @Injectable()
 export class HTTPService {
     private AzureUrl = "https://axperienceapp.azurewebsites.net";
     options: any;    
     
+
+
+
+
     Login(quizUserId, password): any {
-        console.log(quizUserId,password);
         return this.http.get(`${this.AzureUrl}/api/authenticate?userId=${quizUserId}&userPassword=${password}&isAdmin=${true}`,this.options).toPromise().then(this.extractData);
     }
+
     getAllQuizUsers(): any {
         return this.http.get(`${this.AzureUrl}/api/quizuser`,this.options).toPromise().then(this.extractData);
     }
@@ -51,6 +56,7 @@ export class HTTPService {
     getAllCategories(){
         return this.http.get(`${this.AzureUrl}/api/category`,this.options).toPromise().then(this.extractData);
     }
+    
     /**
      * Returns questionWrapper that consisits of Question,Choices and CorrectChoice.
      */
@@ -161,6 +167,10 @@ export class HTTPService {
         return this.http.post(`${this.AzureUrl}/api/quizuser`,user,this.options).toPromise().then(this.extractData);
     }
 
+    addCategory(category: Category): any {
+        return this.http.post(`${this.AzureUrl}/api/category`,category,this.options).toPromise().then(this.extractData);
+    }
+
     /**
      * 
      * @param questionId of which the correct choice is being entered.
@@ -182,6 +192,10 @@ export class HTTPService {
 
     deleteUser(userId){
         return this.http.delete(`${this.AzureUrl}/api/quizUser?QuizUserId=${userId}`,this.options).toPromise().then(this.extractData);
+    }
+
+    deleteCategory(categoryName: any): any {
+        return this.http.delete(`${this.AzureUrl}/api/category?CategoryName=${categoryName}`,this.options).toPromise().then(this.extractData);
     }
 
     private extractData(res: Response) {
