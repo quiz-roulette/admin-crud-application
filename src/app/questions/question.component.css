@@ -28,3 +28,14 @@
 .modal-title{
     display: inline-block;
 }
+
+
+.addbtn{
+    width: 100px;
+    float: right;
+}
+
+.searchrow{
+    margin-left: 10px;
+    margin-right: 10px;
+}
