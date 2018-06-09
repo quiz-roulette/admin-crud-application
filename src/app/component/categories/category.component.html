@@ -15,7 +15,7 @@
         <tr *ngFor="let item of categories">
             <td>{{item.CategoryName}}</td>
             <td>
-                <button type="button" id="delete" class="btn btn-default btn-sm" (click)="deleteCategory(item.CategoryName)">
+                <button type="button" id="delete" class="btn btn-danger btn-sm" (click)="deleteCategory(item.CategoryName)">
                     <span class="glyphicon glyphicon-ban-circle"></span> Delete
                 </button>
             </td>
