@@ -17,7 +17,7 @@ export class SearchPipe implements PipeTransform {
         }
         if(values){
             values = values.filter(function(el){
-                if(el.Text.includes(search)){
+                if(el.Text.includes(search) || el.CategoryName.includes(search)){
                     return el;
                 }
             })
