@@ -175,6 +175,57 @@ export class HTTPService {
         return this.http.post(`${this.AzureUrl}/api/category`, category, this.options).toPromise().then(this.extractData);
     }
 
+    assignUserToGroup(groupname, userid) {
+        console.log({ GName: groupname, UserId: userid });
+        return this.http.post(`${this.AzureUrl}/api/quizusergroup_join`, { GName: groupname, UserId: userid }, this.options).toPromise().then(this.extractData);
+    }
+
+    getAllGroupNames() {
+        return this.http.get(`${this.AzureUrl}/api/quizusergroup`, this.options).toPromise().then(this.extractData);
+    }
+
+    assignUsersToGroup(groupname) {
+        var promises = [];
+        return new Promise((resolve, reject) => {
+            this.getAllQuizUsers().then((res) => {
+                var users = res;
+                console.log(users);
+                users.forEach(element => {
+                    var promise = this.assignUserToGroup(groupname, element.QuizUserId);
+                    promises.push(promise);
+                });
+                Promise.all(promises).then((res) => {
+                    resolve();
+                }).catch((err) => {
+                    console.log(err);
+                    reject();
+                })
+            }).catch((err) => {
+                console.log(err);
+                reject();
+            });
+        })
+    }
+
+    assignGroupsToUser(userId) {
+        var promises = [];
+        return new Promise((resolve, reject) => {
+            this.getAllGroupNames().then((res) => {
+                var groupnames = res;
+                console.log(groupnames);
+                groupnames.forEach(element => {
+                    var promise = this.assignUserToGroup(element.Name, userId);
+                    promises.push(promise);
+                });
+                Promise.all(promises).then((res) => {
+                    resolve();
+                }).catch((err) => {
+                    reject();
+                })
+            }).catch((err) => reject());
+        });
+    }
+
     /**
      * 
      * @param questionId of which the correct choice is being entered.

@@ -14,15 +14,15 @@ export class UserComponent implements OnInit {
     newQuizUser: QuizUser;
     result: Result;
 
-    constructor(private httpService:HTTPService) { }
+    constructor(private httpService: HTTPService) { }
 
-    ngOnInit() { 
+    ngOnInit() {
         this.newQuizUser = new QuizUser();
         this.result = new Result();
         this.getAllUsers();
     }
 
-    getAllUsers(){
+    getAllUsers() {
         this.result.updateInfo("Getting Users...")
         this.httpService.getAllQuizUsers().then((result) => {
             this.quizUsers = result;
@@ -30,25 +30,30 @@ export class UserComponent implements OnInit {
         })
     }
 
-    addUser(){
+    addUser() {
         this.result.updateInfo("Adding User...");
         this.httpService.addUser(this.newQuizUser).then((result) => {
-            if(result){
+            if (result) {
                 this.quizUsers.push(this.newQuizUser);
-                this.newQuizUser = new QuizUser();
-                this.result.updateSuccess(true);
+                this.httpService.assignGroupsToUser(this.newQuizUser.QuizUserId).then((res) => {
+                    console.log("Successfully added all groups to the user");
+                    this.newQuizUser = new QuizUser();
+                    this.result.updateSuccess(true);
+                })
             }
+        }).catch((err) => {
+            console.log(err);
         })
     }
 
-    deleteUser(id){
-        if(id == localStorage.getItem('user')){
+    deleteUser(id) {
+        if (id == localStorage.getItem('user')) {
             this.result.updateError("You cannot delete yourself");
         }
         else {
             this.result.updateInfo("Deleting User...");
             this.httpService.deleteUser(id).then((result) => {
-                if(result){
+                if (result) {
                     this.result.updateTextSuccess("Deleted User Successfully");
                     this.getAllUsers();
                 }
@@ -56,7 +61,7 @@ export class UserComponent implements OnInit {
         }
     }
 
-    updateResult(result: Result){
+    updateResult(result: Result) {
         this.result = result;
     }
 }

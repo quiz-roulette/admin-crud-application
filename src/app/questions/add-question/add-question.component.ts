@@ -27,7 +27,7 @@ export class AddQuestionComponent implements OnInit {
 
     ngOnInit() { }
 
-    addQuestion(text,imageurl, category,choice,correctchoice )
+    addQuestion(text,imageurl, category,choice,correctchoice)
     {
         console.log(text,imageurl);
         this.result.updateInfo("Adding question...");

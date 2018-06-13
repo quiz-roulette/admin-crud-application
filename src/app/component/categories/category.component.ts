@@ -15,15 +15,15 @@ export class CategoryComponent implements OnInit {
     newCategory: Category;
     result: Result;
 
-    constructor(private httpService:HTTPService) { }
+    constructor(private httpService: HTTPService) { }
 
-    ngOnInit() { 
+    ngOnInit() {
         this.newCategory = new Category();
         this.result = new Result();
         this.getAllCategories();
     }
 
-    getAllCategories(){
+    getAllCategories() {
         this.result.updateInfo("Getting Users...")
         this.httpService.getAllCategories().then((result) => {
             this.categories = result;
@@ -31,28 +31,31 @@ export class CategoryComponent implements OnInit {
         })
     }
 
-    addCategory(){
+    addCategory() {
         this.result.updateInfo("Adding Category...");
         this.httpService.addCategory(this.newCategory).then((result) => {
-            if(result){
+            if (result) {
                 this.categories.push(this.newCategory);
-                this.newCategory = new Category();
-                this.result.updateSuccess(true);
+                this.httpService.assignUsersToGroup(this.newCategory.CategoryName).then((res) => {
+                    console.log("Successfully added all users to the group.")
+                    this.newCategory = new Category();
+                    this.result.updateSuccess(true);
+                });
             }
         })
     }
 
-    deleteCategory(categoryName){
-            this.result.updateInfo("Deleting Category...");
-            this.httpService.deleteCategory(categoryName).then((result) => {
-                if(result){
-                    this.result.updateTextSuccess("Deleted User Successfully");
-                    this.getAllCategories();
-                }
-            })
+    deleteCategory(categoryName) {
+        this.result.updateInfo("Deleting Category...");
+        this.httpService.deleteCategory(categoryName).then((result) => {
+            if (result) {
+                this.result.updateTextSuccess("Deleted User Successfully");
+                this.getAllCategories();
+            }
+        })
     }
 
-    updateResult(result: Result){
+    updateResult(result: Result) {
         this.result = result;
     }
 }

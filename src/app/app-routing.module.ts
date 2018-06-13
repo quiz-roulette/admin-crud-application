@@ -7,6 +7,7 @@ import { QuestionComponent } from './questions/question.component';
 import { UserGuard } from './guard/User.guard';
 import { UserComponent } from './component/users/user.component';
 import { CategoryComponent } from './component/categories/category.component';
+import { UserGroupComponent } from './component/user-group/user-group.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -26,5 +27,6 @@ export const routableComponents = [
     AuthenticationComponent,
     QuestionComponent,
     UserComponent,
-    CategoryComponent
+    CategoryComponent,
+    UserGroupComponent
 ];
