@@ -139,13 +139,21 @@ export class HTTPService {
                                         questionWrapper.correctChoice.ChoiceId = element.ChoiceId;
                                         questionWrapper.correctChoice.QuestionId = questionWrapper.QuestionId;
                                         resolve(questionWrapper);
-                                    })
+                                    }).catch((err) => {
+                                        this.deleteQuestion(question.QuestionId);
+                                        reject("Correct Choice Adding Failed");
+                                    });
                                 }
-                            });
-                        })
+                            })
+                        }).catch((err) => {
+                            this.deleteQuestion(question.QuestionId);
+                            reject("Choice Adding Failed");
+                        });
+                    }).catch((err) => {
+                        
                     })
                 }
-                else throw new Error("Question Text or Choice found empty.");
+                else throw new Error("Question Text or Choice cannot be empty.");
             } catch (error) {
                 throw error;
             }
@@ -180,8 +188,20 @@ export class HTTPService {
         return this.http.post(`${this.AzureUrl}/api/quizusergroup_join`, { GName: groupname, UserId: userid }, this.options).toPromise().then(this.extractData);
     }
 
-    getAllGroupNames() {
+    getAllUserGroupNames() {
         return this.http.get(`${this.AzureUrl}/api/quizusergroup`, this.options).toPromise().then(this.extractData);
+    }
+
+    getAllGroups(){
+        return this.getAllUserGroupNames();
+    }
+
+    addGroup(group){
+        return this.http.post(`${this.AzureUrl}/api/group`,group,this.options).toPromise().then(this.extractData);
+    }
+
+    deleteGroup(name){
+        return this.http.delete(`${this.AzureUrl}/api/group?GroupName=${name}`, this.options).toPromise().then(this.extractData);
     }
 
     assignUsersToGroup(groupname) {
@@ -210,7 +230,7 @@ export class HTTPService {
     assignGroupsToUser(userId) {
         var promises = [];
         return new Promise((resolve, reject) => {
-            this.getAllGroupNames().then((res) => {
+            this.getAllGroups().then((res) => {
                 var groupnames = res;
                 console.log(groupnames);
                 groupnames.forEach(element => {

@@ -7,14 +7,15 @@ import { QuestionComponent } from './questions/question.component';
 import { UserGuard } from './guard/User.guard';
 import { UserComponent } from './component/users/user.component';
 import { CategoryComponent } from './component/categories/category.component';
-import { UserGroupComponent } from './component/user-group/user-group.component';
+import { GroupComponent } from './component/groups/group.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
   { path: '', component: AuthenticationComponent },
   { path: 'questions', component: QuestionComponent, canActivate:[UserGuard] },
   { path: 'users', component: UserComponent, canActivate:[UserGuard] },
-  { path: 'categories', component: CategoryComponent, canActivate:[UserGuard] }
+  { path: 'categories', component: CategoryComponent, canActivate:[UserGuard] },
+  { path: 'groups', component: GroupComponent, canActivate:[UserGuard] }
 ];
 
 @NgModule({
@@ -28,5 +29,5 @@ export const routableComponents = [
     QuestionComponent,
     UserComponent,
     CategoryComponent,
-    UserGroupComponent
+    GroupComponent
 ];
