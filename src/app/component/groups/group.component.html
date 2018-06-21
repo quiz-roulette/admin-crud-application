@@ -17,7 +17,7 @@
         <tr *ngFor="let item of groups">
             <td>{{item.Name}}</td>
             <td>
-                <button type="button" id="delete" class="btn btn-info btn-sm" (click)="deleteGroup(item.Name)">
+                <button type="button" id="delete" class="btn btn-info btn-sm" (click)="assignUsers(item.Name)">
                     Assign Users
                 </button>
             </td>

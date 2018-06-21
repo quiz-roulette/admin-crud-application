@@ -150,7 +150,7 @@ export class HTTPService {
                             reject("Choice Adding Failed");
                         });
                     }).catch((err) => {
-                        
+
                     })
                 }
                 else throw new Error("Question Text or Choice cannot be empty.");
@@ -184,24 +184,73 @@ export class HTTPService {
     }
 
     assignUserToGroup(groupname, userid) {
-        console.log({ GName: groupname, UserId: userid });
         return this.http.post(`${this.AzureUrl}/api/quizusergroup_join`, { GName: groupname, UserId: userid }, this.options).toPromise().then(this.extractData);
     }
 
-    getAllUserGroupNames() {
-        return this.http.get(`${this.AzureUrl}/api/quizusergroup`, this.options).toPromise().then(this.extractData);
+    getUsersForGroup(gname) {
+        return this.http.get(`${this.AzureUrl}/api/quizusergroup_join?groupName=` + gname, this.options).toPromise().then(this.extractData);
     }
 
-    getAllGroups(){
+    getGroupsForUser(quizUserId){
+        return this.http.get(`${this.AzureUrl}/api/quizusergroup_join?quizUserId=` + quizUserId, this.options).toPromise().then(this.extractData);
+    }
+
+    assignCustomUsersToGroup(arg0: any, arg1: any): any {
+        console.log("A");
+        return new Promise((resolve, reject) => {
+            console.log("B");
+            this.deleteAllUsersForGroup(arg1).then((res) => {
+                console.log("C");
+                var promises = [];
+                arg0.forEach(element => {
+                    promises.push(this.assignUserToGroup(arg1, element));
+                });
+                console.log("D");
+                Promise.all(promises).then((res) => {
+                    console.log("E");
+                    resolve();
+                }).catch((err) => reject());
+            }).catch((err) => reject());
+        });
+    }
+
+    assignCustomGroupsToUser(arg0: any, arg1: any): any {
+        return new Promise((resolve, reject) => {
+            this.deleteAllGroupsForUser(arg1).then((res) => {
+                var promises = [];
+                arg0.forEach(element => {
+                    promises.push(this.assignUserToGroup(element,arg1));
+                });
+                Promise.all(promises).then((res) => {
+                    console.log("E");
+                    resolve();
+                }).catch((err) => reject());
+            }).catch((err) => reject());
+        });
+    }
+
+    deleteAllUsersForGroup(gname) {
+        return this.http.delete(`${this.AzureUrl}/api/quizusergroup_join?groupName=` + gname, this.options).toPromise().then(this.extractData);
+    }
+
+    deleteAllGroupsForUser(userid){
+        return this.http.delete(`${this.AzureUrl}/api/quizusergroup_join?quizUserId=` + userid, this.options).toPromise().then(this.extractData);
+    }
+
+    getAllUserGroupNames() {
+        return this.http.get(`${this.AzureUrl}/api/group`, this.options).toPromise().then(this.extractData);
+    }
+
+    getAllGroups() {
         return this.getAllUserGroupNames();
     }
 
-    addGroup(group){
-        return this.http.post(`${this.AzureUrl}/api/group`,group,this.options).toPromise().then(this.extractData);
+    addGroup(group) {
+        return this.http.post(`${this.AzureUrl}/api/group`, group, this.options).toPromise().then(this.extractData);
     }
 
-    deleteGroup(name){
-        return this.http.delete(`${this.AzureUrl}/api/group?GroupName=${name}`, this.options).toPromise().then(this.extractData);
+    deleteGroup(name) {
+        return this.http.delete(`${this.AzureUrl}/api/group?groupname=${name}`, this.options).toPromise().then(this.extractData);
     }
 
     assignUsersToGroup(groupname) {

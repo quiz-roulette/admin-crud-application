@@ -1,0 +1,10 @@
+<status [result]="result" (updatedResult)="updateResult($event)"></status>
+<h4>Group: {{groupId}}</h4>
+<div class="checkbox" *ngFor="let list of quizUserCheck">
+    <label>
+        <input type="checkbox" value="{{list.QuizUserId}}" (change)="onCheckboxChange(list,$event)"  [(ngModel)]="list.Checked"/>{{list.QuizUserId}}
+    </label>
+</div>
+<button type="button" id="delete" class="btn btn-info btn-sm" (click)="assign()">
+    Assign
+</button>

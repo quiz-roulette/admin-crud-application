@@ -8,6 +8,8 @@ import { UserGuard } from './guard/User.guard';
 import { UserComponent } from './component/users/user.component';
 import { CategoryComponent } from './component/categories/category.component';
 import { GroupComponent } from './component/groups/group.component';
+import { AssignUserComponent } from './component/groups/assign-user/assign-user.component';
+import { AssignGroupComponent } from './component/users/assign-group/assign-group.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -15,7 +17,9 @@ const routes: Routes = [
   { path: 'questions', component: QuestionComponent, canActivate:[UserGuard] },
   { path: 'users', component: UserComponent, canActivate:[UserGuard] },
   { path: 'categories', component: CategoryComponent, canActivate:[UserGuard] },
-  { path: 'groups', component: GroupComponent, canActivate:[UserGuard] }
+  { path: 'groups', component: GroupComponent, canActivate:[UserGuard] },
+  { path: 'assign-users/:groupname', component: AssignUserComponent, canActivate:[UserGuard] },
+  { path: 'assign-groups/:quizuserid', component: AssignGroupComponent, canActivate:[UserGuard] }
 ];
 
 @NgModule({
@@ -29,5 +33,7 @@ export const routableComponents = [
     QuestionComponent,
     UserComponent,
     CategoryComponent,
-    GroupComponent
+    GroupComponent,
+    AssignUserComponent,
+    AssignGroupComponent
 ];

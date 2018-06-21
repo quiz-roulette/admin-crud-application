@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTPService } from '../../service/http.service';
+import {Router} from "@angular/router";
 import { QuizUser } from '../../model/QuizUser';
 import { Result } from '../../model/Result';
 
@@ -14,7 +15,7 @@ export class UserComponent implements OnInit {
     newQuizUser: QuizUser;
     result: Result;
 
-    constructor(private httpService: HTTPService) { }
+    constructor(private httpService: HTTPService,private router: Router) { }
 
     ngOnInit() {
         this.newQuizUser = new QuizUser();
@@ -59,6 +60,10 @@ export class UserComponent implements OnInit {
                 }
             })
         }
+    }
+
+    assignGroups(userid){
+        this.router.navigate(['/assign-groups', userid]);
     }
 
     updateResult(result: Result) {

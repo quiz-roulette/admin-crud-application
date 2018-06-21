@@ -13,3 +13,16 @@ export class QuizUser{
         this.IsAdmin = false;
     }
 }
+
+export class QuizUserCheck {
+    QuizUserId: string;
+    Checked: boolean;
+
+    /**
+     *
+     */
+    constructor(id: string,checked) {
+        this.QuizUserId = id;
+        this.Checked = checked;
+    }
+}

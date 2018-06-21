@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTPService } from '../../service/http.service';
+import {Router} from "@angular/router";
 import { Result } from '../../model/Result';
 import { Group } from '../../model/Group';
 
@@ -14,7 +15,7 @@ export class GroupComponent implements OnInit {
     newGroup: Group;
     result: Result;
 
-    constructor(private httpService:HTTPService) { }
+    constructor(private httpService:HTTPService, private router: Router) { }
 
     ngOnInit() { 
         this.newGroup = new Group();
@@ -32,7 +33,9 @@ export class GroupComponent implements OnInit {
 
     addGroup(){
         this.result.updateInfo("Adding new Group...");
+        console.log(this.newGroup);
         this.httpService.addGroup(this.newGroup).then((result) => {
+            console.log(result);
             if(result){
                 this.groups.push(this.newGroup);
                 this.newGroup = new Group();
@@ -51,9 +54,9 @@ export class GroupComponent implements OnInit {
             })
     }
 
-    assignGroupsToUser(){}
-
-    assignUserstoGroup(){}
+    assignUsers(groupName){
+        this.router.navigate(['/assign-users', groupName]);
+    }
 
     updateResult(result: Result){
         this.result = result;
