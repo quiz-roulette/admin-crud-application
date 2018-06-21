@@ -22,7 +22,7 @@ export class AssignUserComponent implements OnInit, OnDestroy {
     group: Group;
     result: Result;
     private sub: Subscription;
-    private groupId: string;
+    public groupId: string;
 
     ngOnInit() {
         // assign the subscription to a variable so we can unsubscribe to prevent memory leaks

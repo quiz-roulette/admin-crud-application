@@ -21,7 +21,7 @@ export class AssignGroupComponent implements OnInit, OnDestroy {
     userGroups: GroupCheck[];
     result: Result;
     private sub: Subscription;
-    private quizUserId: string;
+    public quizUserId: string;
 
     ngOnInit() {
         // assign the subscription to a variable so we can unsubscribe to prevent memory leaks
