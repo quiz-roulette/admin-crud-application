@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTPService } from '../../service/http.service';
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
 import { QuizUser } from '../../model/QuizUser';
 import { Result } from '../../model/Result';
 
@@ -15,7 +15,7 @@ export class UserComponent implements OnInit {
     newQuizUser: QuizUser;
     result: Result;
 
-    constructor(private httpService: HTTPService,private router: Router) { }
+    constructor(private httpService: HTTPService, private router: Router) { }
 
     ngOnInit() {
         this.newQuizUser = new QuizUser();
@@ -36,11 +36,12 @@ export class UserComponent implements OnInit {
         this.httpService.addUser(this.newQuizUser).then((result) => {
             if (result) {
                 this.quizUsers.push(this.newQuizUser);
-                this.httpService.assignGroupsToUser(this.newQuizUser.QuizUserId).then((res) => {
-                    console.log("Successfully added all groups to the user");
-                    this.newQuizUser = new QuizUser();
-                    this.result.updateSuccess(true);
-                })
+                this.newQuizUser = new QuizUser();
+                this.result.updateSuccess(true);
+                // this.httpService.assignGroupsToUser(this.newQuizUser.QuizUserId).then((res) => {
+                //     console.log("Successfully added all groups to the user");
+
+                // })
             }
         }).catch((err) => {
             console.log(err);
@@ -62,7 +63,7 @@ export class UserComponent implements OnInit {
         }
     }
 
-    assignGroups(userid){
+    assignGroups(userid) {
         this.router.navigate(['/assign-groups', userid]);
     }
 

@@ -36,11 +36,12 @@ export class CategoryComponent implements OnInit {
         this.httpService.addCategory(this.newCategory).then((result) => {
             if (result) {
                 this.categories.push(this.newCategory);
-                this.httpService.assignUsersToGroup(this.newCategory.CategoryName).then((res) => {
-                    console.log("Successfully added all users to the group.")
-                    this.newCategory = new Category();
-                    this.result.updateSuccess(true);
-                });
+                // this.httpService.assignUsersToGroup(this.newCategory.CategoryName).then((res) => {
+                //     console.log("Successfully added all users to the group.")
+
+                // });
+                this.newCategory = new Category();
+                this.result.updateSuccess(true);
             }
         })
     }
