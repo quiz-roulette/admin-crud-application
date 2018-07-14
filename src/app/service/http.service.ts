@@ -322,6 +322,19 @@ export class HTTPService {
         return this.http.delete(`${this.AzureUrl}/api/category?CategoryName=${categoryName}`, this.options).toPromise().then(this.extractData);
     }
 
+    addQuiz(quiz):any{
+        return this.http.post(`${this.AzureUrl}/api/quiz`,quiz,this.options).toPromise().then(this.extractData);
+    }
+
+    getAllQuiz():any{
+        return this.http.get(`${this.AzureUrl}/api/quiz`,this.options).toPromise().then(this.extractData);
+    }
+
+    endQuiz(id): any{
+        var newObj = { QuizId: id, HasEnded: true, EndDateTime: new Date() };
+        return this.http.patch(`${this.AzureUrl}/api/quiz`,newObj,this.options).toPromise().then(this.extractData);
+    }
+
     private extractData(res: Response) {
         let body = res.json();
         console.log(body);

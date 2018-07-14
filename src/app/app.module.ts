@@ -14,12 +14,14 @@ import { PipeModule } from './app-pipe.module';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { UserGuard } from './guard/User.guard';
 import { NavbarComponent } from './component/navbar/navbar.component';
+import { AddQuizComponent } from './component/quizes/add-quiz/add-quiz.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     routableComponents,
     AddQuestionComponent,
+    AddQuizComponent,
     StatusComponent,
     NavbarComponent
   ],
