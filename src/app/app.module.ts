@@ -16,6 +16,8 @@ import { UserGuard } from './guard/User.guard';
 import { NavbarComponent } from './component/navbar/navbar.component';
 import { AddQuizComponent } from './component/quizes/add-quiz/add-quiz.component';
 
+import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
+const config: SocketIoConfig = { url: 'https://axperience.herokuapp.com/', options: {} };
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +32,8 @@ import { AddQuizComponent } from './component/quizes/add-quiz/add-quiz.component
     HttpModule,
     FormsModule,
     AppRoutingModule,
-    PipeModule.forRoot()
+    PipeModule.forRoot(),
+    SocketIoModule.forRoot(config) 
   ],
   providers: [
     HTTPService,

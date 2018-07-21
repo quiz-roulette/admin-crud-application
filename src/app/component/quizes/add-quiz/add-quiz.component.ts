@@ -3,7 +3,7 @@ import { Result } from '../../../model/Result';
 import { HTTPService } from '../../../service/http.service';
 import { Category } from '../../../model/category';
 import { Group } from '../../../model/Group';
-
+import { Socket } from 'ng-socket-io';
 
 @Component({
     selector: 'add-quiz',
@@ -19,7 +19,7 @@ export class AddQuizComponent implements OnInit {
 
     @Output() addedQuiz = new EventEmitter();
 
-    constructor(private httpService: HTTPService) {
+    constructor(private httpService: HTTPService,private socket: Socket) {
         this.result = new Result();
 
         this.httpService.getAllCategories().then((data) => {
@@ -48,6 +48,7 @@ export class AddQuizComponent implements OnInit {
             };
             this.httpService.addQuiz(quiz).then((res) => {
                 this.addedQuiz.emit("true");
+                this.socket.emit("start quiz",quiz);
                 this.result.updateInfo("Quiz Started...");
             });
         }
