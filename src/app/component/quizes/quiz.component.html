@@ -22,6 +22,7 @@
             <th>Category</th>
             <th>Start</th>
             <td>End</td>
+            <td></td>
             <td>Actions</td>
         </tr>
     </thead>
@@ -32,6 +33,11 @@
             <td>{{item.CategoryName}}</td>
             <td>{{item.StartDateTime}}</td>
             <td>{{item.EndDateTime}}</td>
+            <td>
+                <button type="button" id="delete" class="btn btn-default btn-sm" (click)="redirectToDashboard(item.QuizId)">
+                    <span class="glyphicon glyphicon-play"></span> Dashboard
+                </button>
+            </td>
             <td>
                 <button type="button" id="delete" class="btn btn-default btn-sm" (click)="endQuiz(item.QuizId)">
                     <span class="glyphicon glyphicon-ban-circle"></span> End

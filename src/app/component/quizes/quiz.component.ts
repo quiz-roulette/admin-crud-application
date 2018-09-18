@@ -66,4 +66,8 @@ export class QuizComponent implements OnInit {
     addedQuiz(result){
         this.getAllQuiz();
     }
+
+    redirectToDashboard(quizid){
+        window.open("https://it-club-quiz.herokuapp.com/dashboard/"+quizid, "_blank");
+    }
 }
