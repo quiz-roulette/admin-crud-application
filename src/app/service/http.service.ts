@@ -29,7 +29,7 @@ export class HTTPService {
 
 
     constructor(private http: Http) {
-        this.options = new RequestOptions({ headers: new Headers({ 'ZUMO-API-VERSION': '2.0.0' }) });
+        this.options = new RequestOptions({ headers: new Headers({ 'ZUMO-API-VERSION': '2.0.0', 'authorization': localStorage.getItem('user') }) });
     }
 
     /**
@@ -184,6 +184,7 @@ export class HTTPService {
     }
 
     assignUserToGroup(groupname, userid) {
+        console.log({ GName: groupname, UserId: userid });
         return this.http.post(`${this.AzureUrl}/api/quizusergroup_join`, { GName: groupname, UserId: userid }, this.options).toPromise().then(this.extractData);
     }
 

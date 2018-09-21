@@ -3,6 +3,7 @@ import { HTTPService } from '../../service/http.service';
 import { Router } from "@angular/router";
 import { QuizUser } from '../../model/QuizUser';
 import { Result } from '../../model/Result';
+import { Group } from '../../model/Group';
 
 @Component({
     selector: 'users',
@@ -13,6 +14,8 @@ import { Result } from '../../model/Result';
 export class UserComponent implements OnInit {
     quizUsers: QuizUser[];
     newQuizUser: QuizUser;
+    groups: Group[];
+    selectedGroup: string;
     result: Result;
 
     constructor(private httpService: HTTPService, private router: Router) { }
@@ -21,6 +24,11 @@ export class UserComponent implements OnInit {
         this.newQuizUser = new QuizUser();
         this.result = new Result();
         this.getAllUsers();
+
+        this.httpService.getAllGroups().then((res) => {
+            this.groups = res;
+            console.log(this.groups);
+        });
     }
 
     getAllUsers() {
@@ -33,11 +41,15 @@ export class UserComponent implements OnInit {
 
     addUser() {
         this.result.updateInfo("Adding User...");
+        console.log(this.selectedGroup);
         this.httpService.addUser(this.newQuizUser).then((result) => {
             if (result) {
                 this.quizUsers.push(this.newQuizUser);
-                this.newQuizUser = new QuizUser();
-                this.result.updateSuccess(true);
+                
+                this.httpService.assignUserToGroup(this.selectedGroup,this.newQuizUser.QuizUserId).then((res) => {
+                    this.result.updateSuccess(true);
+                    this.newQuizUser = new QuizUser();
+                })
                 // this.httpService.assignGroupsToUser(this.newQuizUser.QuizUserId).then((res) => {
                 //     console.log("Successfully added all groups to the user");
 
