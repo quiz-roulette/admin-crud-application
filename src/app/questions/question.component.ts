@@ -5,6 +5,7 @@ import { AzureService } from '../service/azure.service';
 import { Category } from '../model/category';
 import { Result } from '../model/Result';
 import * as $ from 'jquery';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'question',
@@ -20,7 +21,7 @@ export class QuestionComponent implements OnInit {
     result: Result;
     searchText: string;
 
-    constructor(private httpService: HTTPService, private azureService: AzureService) { 
+    constructor(private httpService: HTTPService, private azureService: AzureService,private router: Router) { 
         this.isTrue = true;
         this.result = new Result();
         this.searchText = "";
@@ -78,5 +79,10 @@ export class QuestionComponent implements OnInit {
 
     addedQuestion(result){
         this.getAllQuestions();
+    }
+
+    goToCategory(){
+        this.router.navigate(['categories']);
+
     }
 }

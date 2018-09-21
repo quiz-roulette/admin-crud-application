@@ -82,4 +82,8 @@ export class UserComponent implements OnInit {
     updateResult(result: Result) {
         this.result = result;
     }
+
+    goToGroup(){
+        this.router.navigate(['groups']);
+    }
 }

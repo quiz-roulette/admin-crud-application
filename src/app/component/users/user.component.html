@@ -20,8 +20,10 @@
             <input type="checkbox" [(ngModel)]="newQuizUser.IsAdmin" name="quizuseradmin"> Admin
         </label>
     </div> -->
-    <button type="submit" class="btn btn-default" (click)="addUser()">Add</button>
+    <button type="submit" class="btn btn-default" (click)="addUser()">Add User</button>
+    <button type="button" class="btn addbtn btn-success" (click)="goToGroup()">Manage Groups</button>
 </form>
+
 <table class="table">
     <thead>
         <th>Name</th>
