@@ -43,7 +43,9 @@ export class QuestionComponent implements OnInit {
         this.httpService.getAllQuestionWrapper().then((data) => {
             this.questionWrappers = data;
             this.result.updateSuccess(true);
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
     addQuestion(text,imageurl, category,choice,correctchoice )
@@ -61,7 +63,9 @@ export class QuestionComponent implements OnInit {
             this.httpService.addQuestionWrapper(questionWrapper).then((res) => {
                 this.questionWrappers.push(res);
                 this.result.updateTextSuccess("Added Question: "+questionWrapper.Text);
-            }).catch((err) => alert(err))
+            }).catch((err) => {
+                this.result.updateError("Error!");
+            });
         }
         else
         this.result.updateError("Correct option not found the choices. Please ensure to use correct choice from the choices you wrote.");
@@ -70,7 +74,9 @@ export class QuestionComponent implements OnInit {
         this.result.updateInfo("Deleting question...");
         this.httpService.deleteQuestion(questionId).then((data) => {
             this.result.updateTextSuccess("Deleted Question");
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
     updateResult(updatedResult: Result){

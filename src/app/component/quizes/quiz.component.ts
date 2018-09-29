@@ -44,10 +44,12 @@ export class QuizComponent implements OnInit {
                     el.StartDateTime = new Date(el.StartDateTime);
                 }
             })
-            console.log(data);
+            // console.log(data);
             this.quizes = data;
             this.result.updateSuccess(true);
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
     endQuiz(quizid){
@@ -55,7 +57,9 @@ export class QuizComponent implements OnInit {
         this.httpService.endQuiz(quizid).then((data) => {
             this.getAllQuiz();
             this.result.updateSuccess(true);
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
 

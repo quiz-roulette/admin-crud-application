@@ -24,11 +24,11 @@ export class AddQuizComponent implements OnInit {
 
         this.httpService.getAllCategories().then((data) => {
             this.categories = data;
-            console.log(this.categories);
+            // console.log(this.categories);
         })
         this.httpService.getAllGroups().then((data) => {
             this.groups = data;
-            console.log(this.groups);
+            // console.log(this.groups);
         })
     }
 
@@ -50,6 +50,8 @@ export class AddQuizComponent implements OnInit {
                 this.addedQuiz.emit("true");
                 this.socket.emit("start quiz",quiz);
                 this.result.updateInfo("Quiz Started...");
+            }).catch((err) => {
+                this.result.updateError("Error!");
             });
         }
         else {

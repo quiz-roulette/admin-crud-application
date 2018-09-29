@@ -28,7 +28,9 @@ export class CategoryComponent implements OnInit {
         this.httpService.getAllCategories().then((result) => {
             this.categories = result;
             this.result.updateSuccess(true);
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
     addCategory() {
@@ -43,7 +45,9 @@ export class CategoryComponent implements OnInit {
                 this.newCategory = new Category();
                 this.result.updateSuccess(true);
             }
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
     deleteCategory(categoryName) {
@@ -53,7 +57,9 @@ export class CategoryComponent implements OnInit {
                 this.result.updateTextSuccess("Deleted User Successfully");
                 this.getAllCategories();
             }
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
     updateResult(result: Result) {

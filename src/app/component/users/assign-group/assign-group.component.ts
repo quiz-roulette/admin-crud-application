@@ -32,12 +32,12 @@ export class AssignGroupComponent implements OnInit, OnDestroy {
         this.result.updateInfo("Getting groups...")
         this.http.getAllGroups().then((res) => {
             this.groups = res;
-            console.log(this.groups);
+            // console.log(this.groups);
             this.result.updateInfo("Getting Users from this group...")
             this.http.getGroupsForUser(this.quizUserId).then((res1) => {
                 
                 this.checkedGroupsForUser = res1;
-                console.log(this.checkedGroupsForUser)
+                // console.log(this.checkedGroupsForUser)
                 this.setCheckedValues();
             });
         });
@@ -72,6 +72,8 @@ export class AssignGroupComponent implements OnInit, OnDestroy {
         })
         this.http.assignCustomGroupsToUser(groups,this.quizUserId).then((res) => {
             this.result.updateSuccess(true);
+        }).catch((err) => {
+            this.result.updateError("Error!");
         });
     }
 
@@ -86,7 +88,7 @@ export class AssignGroupComponent implements OnInit, OnDestroy {
             });
             if (foundObj) this.userGroups.push(new GroupCheck(foundObj.Name, true));
             else this.userGroups.push(new GroupCheck(el.Name, false));
-            console.log(this.userGroups);
+            // console.log(this.userGroups);
         });
         this.result.updateSuccess(true);
     }

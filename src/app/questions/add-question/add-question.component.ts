@@ -21,15 +21,17 @@ export class AddQuestionComponent implements OnInit {
 
         this.httpService.getAllCategories().then((data) => {
             this.categories = data;
-            console.log(this.categories);
-        })
+            // console.log(this.categories);
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
      }
 
     ngOnInit() { }
 
     addQuestion(text,imageurl, category,choice,correctchoice)
     {
-        console.log(text,imageurl);
+        // console.log(text,imageurl);
         this.result.updateInfo("Adding question...");
         var questionWrapper = new QuestionWrapper();
         questionWrapper.Text = text;

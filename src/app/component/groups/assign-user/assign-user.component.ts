@@ -28,7 +28,7 @@ export class AssignUserComponent implements OnInit, OnDestroy {
         // assign the subscription to a variable so we can unsubscribe to prevent memory leaks
         this.sub = this.route.params.subscribe((params: Params) => {
             this.groupId = params['groupname'];
-            console.log(params);
+            // console.log(params);
         });
 
         this.result.updateInfo("Getting Users...")
@@ -39,6 +39,8 @@ export class AssignUserComponent implements OnInit, OnDestroy {
                 this.checkedQuizUsers = res1;
                 this.setCheckedValues();
             });
+        }).catch((err) => {
+            this.result.updateError("Error!");
         });
     }
 
@@ -71,6 +73,8 @@ export class AssignUserComponent implements OnInit, OnDestroy {
         })
         this.http.assignCustomUsersToGroup(users,this.groupId).then((res) => {
             this.result.updateSuccess(true);
+        }).catch((err) => {
+            this.result.updateError("Error!");
         });
     }
 

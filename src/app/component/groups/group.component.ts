@@ -28,20 +28,24 @@ export class GroupComponent implements OnInit {
         this.httpService.getAllGroups().then((result) => {
             this.groups = result;
             this.result.updateSuccess(true);
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
     addGroup(){
         this.result.updateInfo("Adding new Group...");
-        console.log(this.newGroup);
+        // console.log(this.newGroup);
         this.httpService.addGroup(this.newGroup).then((result) => {
-            console.log(result);
+            // console.log(result);
             if(result){
                 this.groups.push(this.newGroup);
                 this.newGroup = new Group();
                 this.result.updateSuccess(true);
             }
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
     deleteGroup(categoryName){
@@ -51,7 +55,9 @@ export class GroupComponent implements OnInit {
                     this.result.updateTextSuccess("Deleted group Successfully");
                     this.getAllGroups();
                 }
-            })
+            }).catch((err) => {
+                this.result.updateError("Error!");
+            });
     }
 
     assignUsers(groupName){

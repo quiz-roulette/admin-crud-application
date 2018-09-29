@@ -27,7 +27,7 @@ export class UserComponent implements OnInit {
 
         this.httpService.getAllGroups().then((res) => {
             this.groups = res;
-            console.log(this.groups);
+            // console.log(this.groups);
         });
     }
 
@@ -36,12 +36,14 @@ export class UserComponent implements OnInit {
         this.httpService.getAllQuizUsers().then((result) => {
             this.quizUsers = result;
             this.result.updateSuccess(true);
-        })
+        }).catch((err) => {
+            this.result.updateError("Error!");
+        });
     }
 
     addUser() {
         this.result.updateInfo("Adding User...");
-        console.log(this.selectedGroup);
+        // console.log(this.selectedGroup);
         this.httpService.addUser(this.newQuizUser).then((result) => {
             if (result) {
                 this.quizUsers.push(this.newQuizUser);
@@ -49,15 +51,17 @@ export class UserComponent implements OnInit {
                 this.httpService.assignUserToGroup(this.selectedGroup,this.newQuizUser.QuizUserId).then((res) => {
                     this.result.updateSuccess(true);
                     this.newQuizUser = new QuizUser();
-                })
+                }).catch((err) => {
+                    this.result.updateError("Error!");
+                });
                 // this.httpService.assignGroupsToUser(this.newQuizUser.QuizUserId).then((res) => {
                 //     console.log("Successfully added all groups to the user");
 
                 // })
             }
         }).catch((err) => {
-            console.log(err);
-        })
+            this.result.updateError("Error!");
+        });
     }
 
     deleteUser(id) {
@@ -71,7 +75,9 @@ export class UserComponent implements OnInit {
                     this.result.updateTextSuccess("Deleted User Successfully");
                     this.getAllUsers();
                 }
-            })
+            }).catch((err) => {
+                this.result.updateError("Error!");
+            });
         }
     }
 

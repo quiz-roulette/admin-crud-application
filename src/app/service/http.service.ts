@@ -92,7 +92,7 @@ export class HTTPService {
 
             Promise.all(promises).then(function () {
                 questions.forEach(element => {
-                    console.log(element);
+                    // console.log(element);
                     var questionWrapper: QuestionWrapper = new QuestionWrapper();
                     questionWrapper.QuestionId = element.QuestionId;
                     questionWrapper.Text = element.Text;
@@ -120,7 +120,7 @@ export class HTTPService {
             try {
                 if (questionWrapper.Text != "" && questionWrapper.choice.length > 1) {
                     this.addQuestion(questionWrapper.Text, questionWrapper.CategoryName, questionWrapper.ImageUrl).then((question) => {
-                        console.log(question);
+                        // console.log(question);
                         questionWrapper.QuestionId = question.QuestionId;
                         let promises = new Array<Promise<any>>();
                         questionWrapper.choice.forEach((element) => {
@@ -134,7 +134,7 @@ export class HTTPService {
                         Promise.all(promises).then((result) => {
                             questionWrapper.choice.forEach((element) => {
                                 if (element.Text == questionWrapper.correctChoiceText) {
-                                    console.log(questionWrapper.QuestionId, element.ChoiceId);
+                                    // console.log(questionWrapper.QuestionId, element.ChoiceId);
                                     this.addCorrectChoice(questionWrapper.QuestionId, element.ChoiceId).then((res) => {
                                         questionWrapper.correctChoice.ChoiceId = element.ChoiceId;
                                         questionWrapper.correctChoice.QuestionId = questionWrapper.QuestionId;
@@ -184,7 +184,7 @@ export class HTTPService {
     }
 
     assignUserToGroup(groupname, userid) {
-        console.log({ GName: groupname, UserId: userid });
+        // console.log({ GName: groupname, UserId: userid });
         return this.http.post(`${this.AzureUrl}/api/quizusergroup_join`, { GName: groupname, UserId: userid }, this.options).toPromise().then(this.extractData);
     }
 
@@ -197,18 +197,18 @@ export class HTTPService {
     }
 
     assignCustomUsersToGroup(arg0: any, arg1: any): any {
-        console.log("A");
+        // console.log("A");
         return new Promise((resolve, reject) => {
-            console.log("B");
+            // console.log("B");
             this.deleteAllUsersForGroup(arg1).then((res) => {
-                console.log("C");
+                // console.log("C");
                 var promises = [];
                 arg0.forEach(element => {
                     promises.push(this.assignUserToGroup(arg1, element));
                 });
-                console.log("D");
+                // console.log("D");
                 Promise.all(promises).then((res) => {
-                    console.log("E");
+                    // console.log("E");
                     resolve();
                 }).catch((err) => reject());
             }).catch((err) => reject());
@@ -223,7 +223,7 @@ export class HTTPService {
                     promises.push(this.assignUserToGroup(element,arg1));
                 });
                 Promise.all(promises).then((res) => {
-                    console.log("E");
+                    // console.log("E");
                     resolve();
                 }).catch((err) => reject());
             }).catch((err) => reject());
@@ -259,7 +259,7 @@ export class HTTPService {
         return new Promise((resolve, reject) => {
             this.getAllQuizUsers().then((res) => {
                 var users = res;
-                console.log(users);
+                // console.log(users);
                 users.forEach(element => {
                     var promise = this.assignUserToGroup(groupname, element.QuizUserId);
                     promises.push(promise);
@@ -267,11 +267,11 @@ export class HTTPService {
                 Promise.all(promises).then((res) => {
                     resolve();
                 }).catch((err) => {
-                    console.log(err);
+                    // console.log(err);
                     reject();
                 })
             }).catch((err) => {
-                console.log(err);
+                // console.log(err);
                 reject();
             });
         })
@@ -282,7 +282,7 @@ export class HTTPService {
         return new Promise((resolve, reject) => {
             this.getAllGroups().then((res) => {
                 var groupnames = res;
-                console.log(groupnames);
+                // console.log(groupnames);
                 groupnames.forEach(element => {
                     var promise = this.assignUserToGroup(element.Name, userId);
                     promises.push(promise);
@@ -309,7 +309,7 @@ export class HTTPService {
      * 
      * @param questionId the question id that needs to be deleted.
      * It called a HTTP patch method, that contains a JSON object with attributes { questionId: 0, isDelete: true}.
-     * @example httpService.deleteQuestion(1).then((data) => { console.log("deleted Succesfully")});
+     * @example httpService.deleteQuestion(1).then((data) => { // console.log("deleted Succesfully")});
      */
     deleteQuestion(questionId) {
         return this.http.patch(`${this.AzureUrl}/api/question`, { QuestionId: questionId, IsDelete: true }, this.options).toPromise().then(this.extractData);
@@ -338,7 +338,7 @@ export class HTTPService {
 
     private extractData(res: Response) {
         let body = res.json();
-        console.log(body);
+        // console.log(body);
         return body || {};
     }
 
