@@ -24,7 +24,7 @@ export class CategoryComponent implements OnInit {
     }
 
     getAllCategories() {
-        this.result.updateInfo("Getting Users...")
+        this.result.updateInfo("Getting Categories...")
         this.httpService.getAllCategories().then((result) => {
             this.categories = result;
             this.result.updateSuccess(true);
