@@ -44,24 +44,37 @@ export class UserComponent implements OnInit {
     addUser() {
         this.result.updateInfo("Adding User...");
         // console.log(this.selectedGroup);
-        this.httpService.addUser(this.newQuizUser).then((result) => {
-            if (result) {
-                this.quizUsers.push(this.newQuizUser);
-                
-                this.httpService.assignUserToGroup(this.selectedGroup,this.newQuizUser.QuizUserId).then((res) => {
-                    this.result.updateSuccess(true);
-                    this.newQuizUser = new QuizUser();
-                }).catch((err) => {
-                    this.result.updateError("Error!");
-                });
-                // this.httpService.assignGroupsToUser(this.newQuizUser.QuizUserId).then((res) => {
-                //     console.log("Successfully added all groups to the user");
+        if (this.selectedGroup != null && this.newQuizUser.QuizUserId != null && this.newQuizUser.Password != null) {
+            this.httpService.addUser(this.newQuizUser).then((result) => {
+                if (result) {
+                    this.quizUsers.push(this.newQuizUser);
 
-                // })
+                    this.httpService.assignUserToGroup(this.selectedGroup, this.newQuizUser.QuizUserId).then((res) => {
+                        this.result.updateSuccess(true);
+                        this.newQuizUser = new QuizUser();
+                    }).catch((err) => {
+                        this.result.updateError("Error!");
+                    });
+                    // this.httpService.assignGroupsToUser(this.newQuizUser.QuizUserId).then((res) => {
+                    //     console.log("Successfully added all groups to the user");
+
+                    // })
+                }
+            }).catch((err) => {
+                this.result.updateError("Error!");
+            });
+        }
+        else{
+            if (this.selectedGroup != null) {
+                this.result.updateError("Must Select a group");
             }
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+            if (this.newQuizUser.QuizUserId != null) {
+                this.result.updateError("Username cannot be empty");
+            }
+            if (this.newQuizUser.Password != null){
+                this.result.updateError("Password cannot be empty");
+            }
+        }
     }
 
     deleteUser(id) {
@@ -89,7 +102,7 @@ export class UserComponent implements OnInit {
         this.result = result;
     }
 
-    goToGroup(){
+    goToGroup() {
         this.router.navigate(['groups']);
     }
 }
