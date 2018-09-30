@@ -40,7 +40,7 @@ export class AddQuizComponent implements OnInit {
             var quiz = {
                 QuizId: name,
                 CategoryName: category,
-                AdminId: 'exco2018',
+                AdminId: localStorage.getItem('user'),
                 StartDateTime: new Date(),
                 EndDateTime: null,
                 HasEnded: false,
