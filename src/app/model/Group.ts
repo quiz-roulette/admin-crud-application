@@ -1,5 +1,6 @@
 export class Group{
     Name: string;
+    QuizUserCount: Number;
 }
 
 export class GroupCheck {

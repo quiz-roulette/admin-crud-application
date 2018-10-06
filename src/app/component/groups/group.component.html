@@ -10,6 +10,7 @@
 <table class="table">
     <thead>
         <th>Name</th>
+        <th>Assigned Users</th>
         <th> </th>
         <th>Action </th>
         <!-- <span class="label label-danger">Any Question in category will be deleted!</span> -->
@@ -17,6 +18,7 @@
     <tbody>
         <tr *ngFor="let item of groups">
             <td>{{item.Name}}</td>
+            <td>{{item.QuizUserCount}}</td>
             <td>
                 <button type="button" id="delete" class="btn btn-info btn-sm" (click)="assignUsers(item.Name)">
                     Assign Users
