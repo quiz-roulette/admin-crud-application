@@ -6,6 +6,7 @@ import { Category } from '../../model/category';
 import { Result } from '../../model/Result';
 import * as $ from 'jquery';
 import { Quiz } from '../../model/Quiz';
+import { Socket } from 'ng-socket-io';
 
 @Component({
     selector: 'quiz',
@@ -21,7 +22,7 @@ export class QuizComponent implements OnInit {
     result: Result;
     searchText: string;
 
-    constructor(private httpService: HTTPService, private azureService: AzureService) { 
+    constructor(private httpService: HTTPService, private azureService: AzureService,private socket: Socket) { 
         this.isTrue = true;
         this.result = new Result();
         this.searchText = "";
@@ -56,6 +57,7 @@ export class QuizComponent implements OnInit {
         this.result.updateInfo("Ending Quiz...");
         this.httpService.endQuiz(quizid).then((data) => {
             this.getAllQuiz();
+            this.socket.emit("stop quiz",{QuizId: quizid});
             this.result.updateSuccess(true);
         }).catch((err) => {
             this.result.updateError("Error!");
