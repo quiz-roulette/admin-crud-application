@@ -2,7 +2,7 @@ import { Question } from "./question";
 import { Choice } from "./choice";
 import { CorrectChoice } from "./CorrectChoice";
 
-export class QuestionWrapper extends Question{
+export class QuestionWrapper extends Question {
     choice: Choice[];
     correctChoice: CorrectChoice;
     correctChoiceText: string;
@@ -19,11 +19,13 @@ export class QuestionWrapper extends Question{
     /**
      * the choices argument is a string array
      */
-    setChoices(choices: string[]){
+    setChoices(choices: string[]) {
         choices.forEach(element => {
-            var choice = new Choice();
-            choice.Text = element;
-            this.choice.push(choice);
+            if (element != "") {
+                var choice = new Choice();
+                choice.Text = element;
+                this.choice.push(choice);
+            }
         });
     }
 }
