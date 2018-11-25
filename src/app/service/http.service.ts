@@ -336,6 +336,19 @@ export class HTTPService {
         return this.http.patch(`${this.AzureUrl}/api/quiz`,newObj,this.options).toPromise().then(this.extractData);
     }
 
+    addOneTimeQuiz(quiz):any{
+        return this.http.post(`${this.AzureUrl}/api/quiz_with_tokenised`,quiz,this.options).toPromise().then(this.extractData);
+    }
+
+    getAllOneTimeQuiz():any{
+        return this.http.get(`${this.AzureUrl}/api/quiz_with_tokenised`,this.options).toPromise().then(this.extractData);
+    }
+
+    endOneTimeQuiz(id):any{
+        var newObj = { QuizId: id, HasEnded: true, EndDateTime: new Date() };
+        return this.http.patch(`${this.AzureUrl}/api/quiz_with_tokenised`,newObj,this.options).toPromise().then(this.extractData);
+    }
+
     private extractData(res: Response) {
         let body = res.json();
         // console.log(body);

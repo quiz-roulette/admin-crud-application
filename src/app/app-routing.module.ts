@@ -11,6 +11,7 @@ import { GroupComponent } from './component/groups/group.component';
 import { AssignUserComponent } from './component/groups/assign-user/assign-user.component';
 import { AssignGroupComponent } from './component/users/assign-group/assign-group.component';
 import { QuizComponent } from './component/quizes/quiz.component';
+import { OneTimeQuizComponent } from './component/one-time-quiz/one-time-quiz.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'quizes', component: QuizComponent, canActivate:[UserGuard] },
   { path: 'assign-users/:groupname', component: AssignUserComponent, canActivate:[UserGuard] },
   { path: 'assign-groups/:quizuserid', component: AssignGroupComponent, canActivate:[UserGuard] },
+  { path: 'onetimequiz',component: OneTimeQuizComponent, canActivate:[UserGuard]}
 ];
 
 @NgModule({
@@ -38,5 +40,6 @@ export const routableComponents = [
     QuizComponent,
     GroupComponent,
     AssignUserComponent,
-    AssignGroupComponent
+    AssignGroupComponent,
+    OneTimeQuizComponent
 ];

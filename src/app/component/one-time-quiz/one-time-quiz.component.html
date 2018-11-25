@@ -1,0 +1,69 @@
+<status [result]="result" (updatedResult)="updateResult($event)"></status>
+
+<div class="row searchrow">
+    <div class="col-lg-8">
+        <!-- <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for..." [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+            </span>
+        </div> -->
+    </div>
+    <div class="col-lg-4">
+        <button type="button" class="btn addbtn btn-success" data-toggle="modal" data-target="#exampleModal">Add Quiz</button>
+    </div>
+</div>
+<p style="color: red">Quiz Name cannot have any special characters i.e. @ & , e.t.c. </p>
+<table class="table records">
+    <thead>
+        <tr>
+            <th>S/N</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Group</th>
+            <th>Start</th>
+            <td>End</td>
+            <td></td>
+            <td>Actions</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of quizes; let i = index ">
+            <td>{{i+1}}</td>
+            <td>{{item.QuizId}}</td>
+            <td>{{item.CategoryName}}</td>
+            <td>Not Found</td>
+            <td>{{item.StartDateTime}}</td>
+            <td>{{item.EndDateTime}}</td>
+            <td>
+                <button type="button" id="delete" class="btn btn-default btn-sm" (click)="redirectToDashboard(item.QuizId)">
+                    <span class="glyphicon glyphicon-play"></span> Dashboard
+                </button>
+            </td>
+            <td>
+                <button type="button" id="delete" class="btn btn-default btn-sm" (click)="endQuiz(item.QuizId)">
+                    <span class="glyphicon glyphicon-ban-circle"></span> End
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Question</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <add-one-time-quiz (addedQuiz)="addedQuiz($event)"></add-one-time-quiz>
+            </div>
+        </div>
+    </div>
+</div>
