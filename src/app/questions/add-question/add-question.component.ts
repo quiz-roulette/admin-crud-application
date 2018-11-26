@@ -112,13 +112,13 @@ export class AddQuestionComponent implements OnInit {
             console.log(questionwappers.length);
             console.log(questionwappers);
 
-            questionwappers.forEach((el) => {
-                promises.push(this.httpService.addQuestionWrapper(el));
-            })
+            // questionwappers.forEach((el) => {
+            //     promises.push(this.httpService.addQuestionWrapper(el));
+            // })
 
-            Promise.all(promises).then((res) => {
-                this.result.updateTextSuccess("All went okay!");
-            })
+            // Promise.all(promises).then((res) => {
+            //     this.result.updateTextSuccess("All went okay!");
+            // })
         } catch (error) {
             this.result.updateError(error);
         }
