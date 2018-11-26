@@ -50,7 +50,7 @@ export class AddOneTimeQuizComponent implements OnInit {
                     this.result.updateError("Error!");
                 });
             }
-            else{
+            else {
                 this.result.updateError("Quiz Name Cannot contain special characters");
             }
         }

@@ -19,7 +19,7 @@ export class AddQuizComponent implements OnInit {
 
     @Output() addedQuiz = new EventEmitter();
 
-    constructor(private httpService: HTTPService,private socket: Socket) {
+    constructor(private httpService: HTTPService, private socket: Socket) {
         this.result = new Result();
 
         this.httpService.getAllCategories().then((data) => {
@@ -37,22 +37,28 @@ export class AddQuizComponent implements OnInit {
     addQuiz(name, category, group) {
         this.result.updateInfo("Starting quiz...");
         if (name && name != "") {
-            var quiz = {
-                QuizId: name,
-                CategoryName: category,
-                AdminId: localStorage.getItem('user'),
-                StartDateTime: new Date(),
-                EndDateTime: null,
-                HasEnded: false,
-                GroupName: group
-            };
-            this.httpService.addQuiz(quiz).then((res) => {
-                this.addedQuiz.emit("true");
-                this.socket.emit("start quiz",quiz);
-                this.result.updateInfo("Quiz Started...");
-            }).catch((err) => {
-                this.result.updateError("Error!");
-            });
+            var format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+            if (!format.test(name)) {
+                var quiz = {
+                    QuizId: name,
+                    CategoryName: category,
+                    AdminId: localStorage.getItem('user'),
+                    StartDateTime: new Date(),
+                    EndDateTime: null,
+                    HasEnded: false,
+                    GroupName: group
+                };
+                this.httpService.addQuiz(quiz).then((res) => {
+                    this.addedQuiz.emit("true");
+                    this.socket.emit("start quiz", quiz);
+                    this.result.updateInfo("Quiz Started...");
+                }).catch((err) => {
+                    this.result.updateError("Error!");
+                });
+            }
+            else {
+                this.result.updateError("Quiz Name Cannot contain special characters");
+            }
         }
         else {
             this.result.updateError("Quiz Name not found");
