@@ -63,9 +63,9 @@ export class HTTPService {
     getAllQuestionWrapper(): Promise<QuestionWrapper[]> {
         var current = this;
         var questionWrappers = new Array<QuestionWrapper>();
-        var questions: Question[];
-        var choices: Choice[];
-        var correctChoices: CorrectChoice[];
+        var questions = new Array<Question>()
+        var choices = new Array<Choice>();
+        var correctChoices = new Array<CorrectChoice>();
 
         return new Promise((resolve, reject) => {
             let promises = new Array<Promise<any>>();
