@@ -9,7 +9,7 @@ import { UserGuard } from './guard/User.guard';
 export class AppComponent {
   title = 'app';
 
-  constructor(private authGuard: UserGuard){
+  constructor(public authGuard: UserGuard){
 
   }
 }
