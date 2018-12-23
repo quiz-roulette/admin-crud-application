@@ -91,18 +91,22 @@ export class HTTPService {
             promises.push(promise);
 
             Promise.all(promises).then(function () {
-                questions.forEach(element => {
-                    // console.log(element);
-                    var questionWrapper: QuestionWrapper = new QuestionWrapper();
-                    questionWrapper.QuestionId = element.QuestionId;
-                    questionWrapper.Text = element.Text;
-                    questionWrapper.CategoryName = element.CategoryName;
-                    questionWrapper.ImageUrl = element.ImageUrl;
-                    questionWrapper.choice = choices.filter((el) => el.QuestionId == element.QuestionId);
-                    questionWrapper.correctChoice = correctChoices.find((el) => el.QuestionId == questionWrapper.QuestionId);
-                    questionWrappers.push(questionWrapper);
-                });
-                resolve(questionWrappers);
+                try {
+                    questions.forEach(element => {
+                        // console.log(element);
+                        var questionWrapper: QuestionWrapper = new QuestionWrapper();
+                        questionWrapper.QuestionId = element.QuestionId;
+                        questionWrapper.Text = element.Text;
+                        questionWrapper.CategoryName = element.CategoryName;
+                        questionWrapper.ImageUrl = element.ImageUrl;
+                        questionWrapper.choice = choices.filter((el) => el.QuestionId == element.QuestionId);
+                        questionWrapper.correctChoice = correctChoices.find((el) => el.QuestionId == questionWrapper.QuestionId);
+                        questionWrappers.push(questionWrapper);
+                    });
+                    resolve(questionWrappers);
+                } catch (error) {
+                    resolve(questionWrappers);
+                }
             });
         });
 
