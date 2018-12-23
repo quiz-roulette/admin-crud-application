@@ -1,2 +1,12 @@
 <navbar></navbar>
 <router-outlet></router-outlet>
+<div class="central-loader" *ngIf="(authGuard.loader)">
+    <div className="container-load"> 
+        <svg class="loader" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">
+            <circle class="loader circle" cx="170" cy="170" r="160" stroke="#E2007C" />
+            <circle class="loader circle" cx="170" cy="170" r="135" stroke="#404041" />
+            <circle class="loader circle" cx="170" cy="170" r="110" stroke="#E2007C" />
+            <circle class="loader circle" cx="170" cy="170" r="85" stroke="#404041" />
+        </svg>
+        </div>
+</div>
