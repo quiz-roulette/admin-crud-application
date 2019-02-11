@@ -29,7 +29,14 @@ export class HTTPService {
 
 
     constructor(private http: Http) {
-        this.options = new RequestOptions({ headers: new Headers({ 'ZUMO-API-VERSION': '2.0.0', 'authorization': localStorage.getItem('user') }) });
+        this.options = new RequestOptions(
+            { headers: new Headers(
+                { 'ZUMO-API-VERSION': '2.0.0', 
+                  'authorization': localStorage.getItem('user'),
+                   'admin': localStorage.getItem('user'),
+                   'SIM': true 
+                })
+            });
     }
 
     /**
@@ -351,6 +358,14 @@ export class HTTPService {
     endOneTimeQuiz(id):any{
         var newObj = { QuizId: id, HasEnded: true, EndDateTime: new Date() };
         return this.http.patch(`${this.AzureUrl}/api/quiz_with_tokenised`,newObj,this.options).toPromise().then(this.extractData);
+    }
+
+    getAllQuizLog(quizname):any{
+        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizname}`,this.options).toPromise().then(this.extractData);
+    }
+
+    getQuizUser(quizuserId):any{
+        return this.http.get(`${this.AzureUrl}/api/quizuser?QuizUserId=${quizuserId}`,this.options).toPromise().then(this.extractData);
     }
 
     private extractData(res: Response) {

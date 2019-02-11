@@ -1,0 +1,23 @@
+<h1>Dashboard {{quizname}}</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td>Quiz User Id</td>
+            <td>Time Taken</td>
+            <td>Score</td>
+            <td>SIM ID</td>
+            <td>Name</td>
+            <td>Club Name</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let quizlog of quizlogs" > <!-- [routerLink]="['/transfer']" [queryParams]="{ quizname: transfer.id }" -->
+            <td>{{quizlog.QuizUserId}}</td>
+            <td>{{quizlog.TimeTaken}}</td>
+            <td>{{quizlog.Score}}</td>
+            <td>{{quizlog.SIMID}}</td>
+            <td>{{quizlog.Name}}</td>
+            <td>{{quizlog.ClubName}}</td>
+        </tr>
+    </tbody>
+</table> 

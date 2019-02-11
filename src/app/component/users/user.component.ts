@@ -6,7 +6,7 @@ import { Result } from '../../model/Result';
 import { Group } from '../../model/Group';
 
 @Component({
-    selector: 'users',
+    selector: 'dashboard',
     templateUrl: 'user.component.html',
     styleUrls: ['user.component.css']
 })
