@@ -7,6 +7,7 @@ import { Result } from '../../model/Result';
 import * as $ from 'jquery';
 import { Quiz } from '../../model/Quiz';
 import { Socket } from 'ng-socket-io';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'one-time-quiz',
@@ -22,7 +23,11 @@ export class OneTimeQuizComponent implements OnInit {
     result: Result;
     searchText: string;
 
-    constructor(private httpService: HTTPService, private azureService: AzureService,private socket: Socket) { 
+    constructor(
+        private httpService: HTTPService, 
+        private azureService: AzureService,
+        private socket: Socket,
+        private router: Router) { 
         this.isTrue = true;
         this.result = new Result();
         this.searchText = "";
@@ -73,7 +78,11 @@ export class OneTimeQuizComponent implements OnInit {
         this.getAllQuiz();
     }
 
-    redirectToDashboard(quizid){
+    redirectToExternalDashboard(quizid){
         window.open("https://it-club-quiz.herokuapp.com/dashboard/"+quizid, "_blank");
+    }
+
+    redirectToDashboard(quizid){
+        this.router.navigate(['/dashboard', quizid]);
     }
 }
