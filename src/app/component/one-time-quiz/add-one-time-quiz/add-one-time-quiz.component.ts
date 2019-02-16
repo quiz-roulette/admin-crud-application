@@ -29,23 +29,35 @@ export class AddOneTimeQuizComponent implements OnInit {
 
     ngOnInit() { }
 
-    addQuiz(name, category) {
+    addQuiz(name, category, questionCount) {
+        console.log(questionCount);
         this.result.updateInfo("Starting quiz...");
         var format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
         if (name && name != "") {
             if (!format.test(name)) {
-                var quiz = {
-                    QuizId: name,
-                    CategoryName: category,
-                    AdminId: localStorage.getItem('user'),
-                    StartDateTime: new Date(),
-                    EndDateTime: null,
-                    HasEnded: false
-                };
-                this.httpService.addOneTimeQuiz(quiz).then((res) => {
-                    this.addedQuiz.emit("true");
-                    this.socket.emit("start quiz", quiz);
-                    this.result.updateInfo("Quiz Started...");
+                this.httpService.getCategoryQuestionCount(category).then((resobj) => {
+                    if(resobj.Count >= questionCount){
+                        var quiz = {
+                            QuizId: name,
+                            CategoryName: category,
+                            AdminId: localStorage.getItem('user'),
+                            QuestionCount: questionCount,
+                            StartDateTime: new Date(),
+                            EndDateTime: null,
+                            HasEnded: false
+                        };
+                        this.httpService.addOneTimeQuiz(quiz).then((res) => {
+                            this.addedQuiz.emit("true");
+                            this.socket.emit("start quiz", quiz);
+                            this.result.updateInfo("Quiz Started...");
+                        }).catch((err) => {
+                            this.result.updateError("Error!");
+                        });
+                    }
+                    else{
+                        this.result.updateError("You cannot ask question more than the question in database!");
+                    }
+                    
                 }).catch((err) => {
                     this.result.updateError("Error!");
                 });

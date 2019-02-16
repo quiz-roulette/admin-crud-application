@@ -368,6 +368,10 @@ export class HTTPService {
         return this.http.get(`${this.AzureUrl}/api/quizuser?QuizUserId=${quizuserId}`,this.options).toPromise().then(this.extractData);
     }
 
+    getCategoryQuestionCount(categoryName):any{
+        return this.http.get(`${this.AzureUrl}/api/getQuestionCountForCategory?CategoryName=${categoryName}`,this.options).toPromise().then(this.extractData);
+    }
+
     private extractData(res: Response) {
         let body = res.json();
         // console.log(body);

@@ -15,6 +15,10 @@
         <option *ngFor="let x of groups" [value]="x.Name" [selected]="selectedGroup == x.Name">{{x.Name}}</option>
     </select>
 </div>
-<button class="btn btn-success" (click)="addQuiz(quizname.value, quizcategory.value, quizgroup.value)">
+<div class="form-group">
+    <label for="question">Question Count<sub>&nbsp;How many questions you want to ask users?</sub></label>
+    <input type="number" class="form-control" placeholder="Total Number of Question" id="questioncount" #questioncount>
+</div>
+<button class="btn btn-success" (click)="addQuiz(quizname.value, quizcategory.value, quizgroup.value,questioncount.value)">
     <span class="glyphicon glyphicon-ok"></span>&nbsp;Submit
 </button>
