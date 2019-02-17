@@ -5,11 +5,13 @@ export class QuizLog{
     SIMID: string;
     Name: string;
     ClubName: string;
+    Result: number;
     
-    addQuizInfo(quizuserid, timetaken, score){
+    addQuizInfo(quizuserid, timetaken, score,result){
         this.QuizUserId = quizuserid;
         this.TimeTaken = timetaken;
         this.Score = score;
+        this.Result = result;
     }
 
     addUserInfo(simid, name, clubname){

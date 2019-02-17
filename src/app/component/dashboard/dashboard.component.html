@@ -6,18 +6,22 @@
             <td>Club Name</td>
             <td>SIM ID</td>
             <td>Name</td>
-            <td>Time Taken</td>
             <td>Score</td>
+            <td>Result</td>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let quizlog of quizlogs" > <!-- [routerLink]="['/transfer']" [queryParams]="{ quizname: transfer.id }" -->
+        <tr *ngFor="let quizlog of quizlogs">
+            <!-- [routerLink]="['/transfer']" [queryParams]="{ quizname: transfer.id }" -->
             <!-- <td>{{quizlog.QuizUserId}}</td> -->
             <td>{{quizlog.ClubName}}</td>
             <td>{{quizlog.SIMID}}</td>
             <td>{{quizlog.Name}}</td>
-            <td>{{quizlog.TimeTaken}}</td>
             <td>{{quizlog.Score}}</td>
+            <td>
+                <span *ngIf="quizlog.Result == 1">Pass</span>
+                <span *ngIf="quizlog.Result == 0">Fail</span>
+            </td>
         </tr>
     </tbody>
-</table> 
+</table>

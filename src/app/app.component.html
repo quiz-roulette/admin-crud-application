@@ -1,5 +1,5 @@
 <navbar></navbar>
-<router-outlet></router-outlet>
+<router-outlet *ngIf="! (authGuard.loader)"></router-outlet>
 <div class="central-loader" *ngIf="(authGuard.loader)">
     <div className="container-load"> 
         <svg class="loader" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">

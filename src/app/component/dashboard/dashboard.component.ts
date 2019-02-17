@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
             console.log(res);
             res.forEach(element => {
                 var ql = new QuizLog();
-                ql.addQuizInfo(element.QuizUserId, element.TimeTaken, element.Score);
+                ql.addQuizInfo(element.QuizUserId, element.TimeTaken, element.Score,element.Result);
                 this.http.getQuizUser(element.QuizUserId).then((res1) => {
                     ql.addUserInfo(res1.SIMID, res1.Name, res1.ClubName);
                 })

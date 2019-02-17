@@ -29,8 +29,9 @@ export class AddOneTimeQuizComponent implements OnInit {
 
     ngOnInit() { }
 
-    addQuiz(name, category, questionCount) {
+    addQuiz(name, category, questionCount,passingpercentage) {
         console.log(questionCount);
+        passingpercentage = passingpercentage ? passingpercentage : null;
         this.result.updateInfo("Starting quiz...");
         var format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
         if (name && name != "") {
@@ -42,6 +43,7 @@ export class AddOneTimeQuizComponent implements OnInit {
                             CategoryName: category,
                             AdminId: localStorage.getItem('user'),
                             QuestionCount: questionCount,
+                            PassingPercentage: passingpercentage,
                             StartDateTime: new Date(),
                             EndDateTime: null,
                             HasEnded: false
