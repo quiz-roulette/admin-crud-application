@@ -45,6 +45,7 @@ export class AuthenticationComponent implements OnInit {
         this.result.updateInfo("Logging in..")
         this.httpService.Login(this.quizUser.QuizUserId, this.quizUser.Password).then(result => {
             if (result == true) {
+                    this.httpService.updateOptions();
                     localStorage.setItem('user',this.quizUser.QuizUserId);
                     localStorage.setItem('password',this.quizUser.Password);
                     this.result.updateSuccess(true);

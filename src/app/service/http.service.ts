@@ -30,12 +30,27 @@ export class HTTPService {
 
     constructor(private http: Http) {
         this.options = new RequestOptions(
-            { headers: new Headers(
-                { 'ZUMO-API-VERSION': '2.0.0', 
-                  'authorization': localStorage.getItem('user'),
-                   'admin': localStorage.getItem('user'),
-                   'SIM': true 
-                })
+            {
+                headers: new Headers(
+                    {
+                        'ZUMO-API-VERSION': '2.0.0',
+                        'authorization': localStorage.getItem('user'),
+                        'admin': localStorage.getItem('user'),
+                        'SIM': true
+                    })
+            });
+    }
+
+    updateOptions() {
+        this.options = new RequestOptions(
+            {
+                headers: new Headers(
+                    {
+                        'ZUMO-API-VERSION': '2.0.0',
+                        'authorization': localStorage.getItem('user'),
+                        'admin': localStorage.getItem('user'),
+                        'SIM': true
+                    })
             });
     }
 
@@ -203,7 +218,7 @@ export class HTTPService {
         return this.http.get(`${this.AzureUrl}/api/quizusergroup_join?groupName=` + gname, this.options).toPromise().then(this.extractData);
     }
 
-    getGroupsForUser(quizUserId){
+    getGroupsForUser(quizUserId) {
         return this.http.get(`${this.AzureUrl}/api/quizusergroup_join?quizUserId=` + quizUserId, this.options).toPromise().then(this.extractData);
     }
 
@@ -231,7 +246,7 @@ export class HTTPService {
             this.deleteAllGroupsForUser(arg1).then((res) => {
                 var promises = [];
                 arg0.forEach(element => {
-                    promises.push(this.assignUserToGroup(element,arg1));
+                    promises.push(this.assignUserToGroup(element, arg1));
                 });
                 Promise.all(promises).then((res) => {
                     // console.log("E");
@@ -245,7 +260,7 @@ export class HTTPService {
         return this.http.delete(`${this.AzureUrl}/api/quizusergroup_join?groupName=` + gname, this.options).toPromise().then(this.extractData);
     }
 
-    deleteAllGroupsForUser(userid){
+    deleteAllGroupsForUser(userid) {
         return this.http.delete(`${this.AzureUrl}/api/quizusergroup_join?quizUserId=` + userid, this.options).toPromise().then(this.extractData);
     }
 
@@ -334,42 +349,42 @@ export class HTTPService {
         return this.http.delete(`${this.AzureUrl}/api/category?CategoryName=${categoryName}`, this.options).toPromise().then(this.extractData);
     }
 
-    addQuiz(quiz):any{
-        return this.http.post(`${this.AzureUrl}/api/quiz`,quiz,this.options).toPromise().then(this.extractData);
+    addQuiz(quiz): any {
+        return this.http.post(`${this.AzureUrl}/api/quiz`, quiz, this.options).toPromise().then(this.extractData);
     }
 
-    getAllQuiz():any{
-        return this.http.get(`${this.AzureUrl}/api/quiz`,this.options).toPromise().then(this.extractData);
+    getAllQuiz(): any {
+        return this.http.get(`${this.AzureUrl}/api/quiz`, this.options).toPromise().then(this.extractData);
     }
 
-    endQuiz(id): any{
+    endQuiz(id): any {
         var newObj = { QuizId: id, HasEnded: true, EndDateTime: new Date() };
-        return this.http.patch(`${this.AzureUrl}/api/quiz`,newObj,this.options).toPromise().then(this.extractData);
+        return this.http.patch(`${this.AzureUrl}/api/quiz`, newObj, this.options).toPromise().then(this.extractData);
     }
 
-    addOneTimeQuiz(quiz):any{
-        return this.http.post(`${this.AzureUrl}/api/quiz_with_tokenised`,quiz,this.options).toPromise().then(this.extractData);
+    addOneTimeQuiz(quiz): any {
+        return this.http.post(`${this.AzureUrl}/api/quiz_with_tokenised`, quiz, this.options).toPromise().then(this.extractData);
     }
 
-    getAllOneTimeQuiz():any{
-        return this.http.get(`${this.AzureUrl}/api/quiz_with_tokenised`,this.options).toPromise().then(this.extractData);
+    getAllOneTimeQuiz(): any {
+        return this.http.get(`${this.AzureUrl}/api/quiz_with_tokenised`, this.options).toPromise().then(this.extractData);
     }
 
-    endOneTimeQuiz(id):any{
+    endOneTimeQuiz(id): any {
         var newObj = { QuizId: id, HasEnded: true, EndDateTime: new Date() };
-        return this.http.patch(`${this.AzureUrl}/api/quiz_with_tokenised`,newObj,this.options).toPromise().then(this.extractData);
+        return this.http.patch(`${this.AzureUrl}/api/quiz_with_tokenised`, newObj, this.options).toPromise().then(this.extractData);
     }
 
-    getAllQuizLog(quizname):any{
-        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizname}`,this.options).toPromise().then(this.extractData);
+    getAllQuizLog(quizname): any {
+        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizname}`, this.options).toPromise().then(this.extractData);
     }
 
-    getQuizUser(quizuserId):any{
-        return this.http.get(`${this.AzureUrl}/api/quizuser?QuizUserId=${quizuserId}`,this.options).toPromise().then(this.extractData);
+    getQuizUser(quizuserId): any {
+        return this.http.get(`${this.AzureUrl}/api/quizuser?QuizUserId=${quizuserId}`, this.options).toPromise().then(this.extractData);
     }
 
-    getCategoryQuestionCount(categoryName):any{
-        return this.http.get(`${this.AzureUrl}/api/getQuestionCountForCategory?CategoryName=${categoryName}`,this.options).toPromise().then(this.extractData);
+    getCategoryQuestionCount(categoryName): any {
+        return this.http.get(`${this.AzureUrl}/api/getQuestionCountForCategory?CategoryName=${categoryName}`, this.options).toPromise().then(this.extractData);
     }
 
     private extractData(res: Response) {
