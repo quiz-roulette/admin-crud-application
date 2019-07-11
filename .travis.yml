@@ -13,5 +13,5 @@ addons:
 
 script:
   - npm run build
-  - xvfb-run npm run test
+  - xvfb-run npm test --watch=false
   - xvfb-run npm run e2e
