@@ -18,6 +18,7 @@ import { AddQuizComponent } from './component/quizes/add-quiz/add-quiz.component
 
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { AddOneTimeQuizComponent } from './component/one-time-quiz/add-one-time-quiz/add-one-time-quiz.component';
+import { NotFoundComponent } from './component/not-found/NotFound.Component';
 const config: SocketIoConfig = { url: 'https://axperience.herokuapp.com/', options: {} };
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ const config: SocketIoConfig = { url: 'https://axperience.herokuapp.com/', optio
     AddQuizComponent,
     AddOneTimeQuizComponent,
     StatusComponent,
-    NavbarComponent
+    NavbarComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

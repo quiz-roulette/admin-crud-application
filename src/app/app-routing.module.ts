@@ -13,6 +13,7 @@ import { AssignGroupComponent } from './component/users/assign-group/assign-grou
 import { QuizComponent } from './component/quizes/quiz.component';
 import { OneTimeQuizComponent } from './component/one-time-quiz/one-time-quiz.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
+import { NotFoundComponent } from './component/not-found/NotFound.Component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -44,5 +45,6 @@ export const routableComponents = [
     AssignUserComponent,
     AssignGroupComponent,
     OneTimeQuizComponent,
-    DashboardComponent
+    DashboardComponent,
+    NotFoundComponent
 ];
