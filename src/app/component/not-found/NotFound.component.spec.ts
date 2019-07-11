@@ -22,7 +22,6 @@ describe('WelcomeComponent (class only)', () => {
 
     it('should contain a value for message after ngOnInit', () => {
         comp.ngOnInit();
-        expect(comp.message).toBeUndefined();
         expect(comp.message).toContain("Not Found");
     });
 });
