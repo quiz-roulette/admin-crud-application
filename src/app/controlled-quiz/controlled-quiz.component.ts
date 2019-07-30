@@ -16,7 +16,7 @@ import { Socket } from 'ng-socket-io';
 
 export class ControlledQuizComponent implements OnInit {
     private sub: Subscription;
-    private quizname: String;
+    public quizname: String;
     private quiz: Quiz;
     public currentQuestion;
     private currentQuestionId;
@@ -25,13 +25,15 @@ export class ControlledQuizComponent implements OnInit {
     private choices: Choice[];
     private interval;
     //DOM changes
-    private waitingView: boolean;
-    private statisticsView: boolean;
-    private resultView: boolean;
+    public waitingView: boolean;
+    public questionView: boolean;
+    public statisticsView: boolean;
+    public resultView: boolean;
     constructor(private http: HTTPService, private route: ActivatedRoute, private router: Router, private socket: Socket) {
         this.currentQuestion = null;
         this.currentQuestionId = -1;
         this.waitingView = true;
+        this.questionView = false;
         this.statisticsView = false;
         this.resultView = false;
      }
@@ -96,6 +98,7 @@ export class ControlledQuizComponent implements OnInit {
         else{
             //set next question based on the currentQuestion id    
         }
+        this.questionView = true;
         this.currentQuestionId = this.currentQuestion.QuestionId;
         var currentContext =  this;
         setTimeout(function(){
@@ -126,7 +129,7 @@ export class ControlledQuizComponent implements OnInit {
 
     stopCurrentQuestion(){
         console.log("Lets show some stats");
-        this.currentQuestion = null;
+        this.questionView = false;
         this.statisticsView = true;
     }
 
