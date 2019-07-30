@@ -1,0 +1,25 @@
+.choice {
+  padding: 10px;
+}
+
+.circle {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: stroke 10s ease-out infinite;
+}
+
+.statistics .option{
+  width: 50px;
+  height: 100px;
+  background: gray;
+  -webkit-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+  -moz-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+  -o-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+  transition:width 300ms ease-in-out, height 300ms ease-in-out;
+}
+
+@keyframes stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
