@@ -14,6 +14,7 @@ import { QuizComponent } from './component/quizes/quiz.component';
 import { OneTimeQuizComponent } from './component/one-time-quiz/one-time-quiz.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { NotFoundComponent } from './component/not-found/NotFound.Component';
+import { ControlledQuizComponent } from './controlled-quiz/controlled-quiz.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -26,7 +27,9 @@ const routes: Routes = [
   { path: 'assign-users/:groupname', component: AssignUserComponent, canActivate:[UserGuard] },
   { path: 'assign-groups/:quizuserid', component: AssignGroupComponent, canActivate:[UserGuard] },
   { path: 'onetimequiz',component: OneTimeQuizComponent, canActivate:[UserGuard]},
-  { path: 'dashboard/:quizname',component: DashboardComponent, canActivate:[UserGuard]}
+  { path: 'dashboard/:quizname',component: DashboardComponent, canActivate:[UserGuard]},
+  //TODO: remember to add canActivate later
+  { path: 'controlledquiz/:quizname',component: ControlledQuizComponent}
 ];
 
 @NgModule({
@@ -46,5 +49,6 @@ export const routableComponents = [
     AssignGroupComponent,
     OneTimeQuizComponent,
     DashboardComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ControlledQuizComponent
 ];
