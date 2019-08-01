@@ -4,6 +4,10 @@
 
 .circle {
   stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+}
+
+.circle .animation{
   stroke-dashoffset: 1000;
   animation: stroke 10s ease-out infinite;
 }
