@@ -19,11 +19,18 @@ export class ControlledQuizComponent implements OnInit {
     public quizname: String;
     private quiz: Quiz;
     public currentQuestion;
-    private currentQuestionId;
+    private currentQuestionIndex;
     private questions: Question[];
     private correctChoice: CorrectChoice[];
     private choices: Choice[];
     private interval;
+    /**
+     * usersAnswersForQuestions: {
+     *  ChoiceId: '',
+     *  Questionid: ''
+     * }
+     */
+    private usersAnswersForQuestions = new Array();
     //DOM changes
     public waitingView: boolean;
     public questionView: boolean;
@@ -31,7 +38,6 @@ export class ControlledQuizComponent implements OnInit {
     public resultView: boolean;
     constructor(private http: HTTPService, private route: ActivatedRoute, private router: Router, private socket: Socket) {
         this.currentQuestion = null;
-        this.currentQuestionId = -1;
         this.waitingView = true;
         this.questionView = false;
         this.statisticsView = false;
@@ -55,7 +61,12 @@ export class ControlledQuizComponent implements OnInit {
     }
 
     loadData() {
-        
+        this.http.getQuizDataByQuizId(this.quizname).then((res) => {
+            console.log(res);
+            this.questions = res.Questions;
+            this.choices = res.Choices;
+            this.correctChoice = res.CorrectChoices;
+        })
     }
 
     startQuiz(){
@@ -78,28 +89,39 @@ export class ControlledQuizComponent implements OnInit {
         }
      */
     setNextQuestion() {
+        this.statisticsView = false;
         console.log(this.currentQuestion);
         if(this.currentQuestion == null){
+            this.currentQuestionIndex = 0;
             //set first question
             this.currentQuestion = {
-                QuestionText: 'Question is Question',
-                QuestionImageURL: '',
-                QuestionId: 0,
-                Choices: [
-                    'Text1', 
-                    'Text2',
-                    'Text3'
-                ],
-                CorrectChoiceText: '',
+                QuestionText: this.questions[this.currentQuestionIndex].Text,
+                QuestionImageURL: this.questions[this.currentQuestionIndex].ImageUrl,
+                QuestionId: this.questions[this.currentQuestionIndex].QuestionId,
+                Choices: this.choices.filter(el => el.QuestionId == this.questions[this.currentQuestionIndex].QuestionId),
+                CorrectChoiceText: this.correctChoice.filter(el => el.QuestionId == this.questions[this.currentQuestionIndex].QuestionId)[0],
+                CountDownTimer: 10,
+                AnsweredCount: 0
+            }
+        }
+        else if(this.questions.length > this.currentQuestionIndex + 1){
+            //set next question based on the currentQuestion id    
+            this.currentQuestionIndex = this.currentQuestionIndex + 1;
+            //set first question
+            this.currentQuestion = {
+                QuestionText: this.questions[this.currentQuestionIndex].Text,
+                QuestionImageURL: this.questions[this.currentQuestionIndex].ImageUrl,
+                QuestionId: this.questions[this.currentQuestionIndex].QuestionId,
+                Choices: this.choices.filter(el => el.QuestionId == this.questions[this.currentQuestionIndex].QuestionId),
+                CorrectChoiceText: this.correctChoice.filter(el => el.QuestionId == this.questions[this.currentQuestionIndex].QuestionId)[0],
                 CountDownTimer: 10,
                 AnsweredCount: 0
             }
         }
         else{
-            //set next question based on the currentQuestion id    
+            return;
         }
         this.questionView = true;
-        this.currentQuestionId = this.currentQuestion.QuestionId;
         var currentContext =  this;
         setTimeout(function(){
             var count = currentContext.currentQuestion.CountDownTimer;
@@ -131,6 +153,19 @@ export class ControlledQuizComponent implements OnInit {
         console.log("Lets show some stats");
         this.questionView = false;
         this.statisticsView = true;
+    }
+
+    
+
+    anayliseData(){
+        var list = this.usersAnswersForQuestions.filter(el => el.QuestionId === this.currentQuestion.QuestionId);
+        var choices = this.currentQuestion.Choices;
+        var analysedData = new Array();
+        for(var i=0; i<list.length; i++){
+            analysedData[list[i].ChoiceId] = analysedData[list[i].ChoiceId] + 1;
+        }
+
+        console.log(analysedData);
     }
 
 }

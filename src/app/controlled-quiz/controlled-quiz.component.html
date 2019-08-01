@@ -2,7 +2,7 @@
 
 <div *ngIf="waitingView === true">
     <span>{{quizname}}</span>
-    <br/>
+    <br />
     <button (click)="startQuiz()">Ready Quiz</button>
     <svg width="100" height="100">
         <circle class="circle" id="circle" cx="50" cy="50" r="47" stroke="#231f20" stroke-width="5" fill-opacity="0" />
@@ -11,11 +11,12 @@
         Sorry, your browser does not support inline SVG.
     </svg>
 </div>
-<div class="container question" *ngIf="currentQuestion && currentQuestion != null">
+<div class="container question" *ngIf="questionView === true">
     <div class="row">
         <div class="col-md-4">
             <svg width="100" height="100">
-                <circle class="circle" id="circle" cx="50" cy="50" r="47" stroke="#231f20" stroke-width="5" fill-opacity="0" />
+                <circle class="circle animation" id="circle" cx="50" cy="50" r="47" stroke="#231f20" stroke-width="5"
+                    fill-opacity="0" />
                 <text x="50%" y="50%" text-anchor="middle" fill="black" font-size="25px" font-family="Arial" dy=".3em"
                     id="timer">{{currentQuestion.CountDownTimer}}</text>
                 Sorry, your browser does not support inline SVG.
@@ -28,14 +29,15 @@
             <br />
             <div class="row">
                 <span class="col-xs-6 choice" *ngFor="let currentChoice of currentQuestion.Choices">
-                    {{currentChoice}} 
-                </span>    
+                    {{currentChoice.Text}}
+                </span>
             </div>
-            
+
         </div>
         <div class="col-md-4">
             <svg width="100" height="100">
-                <circle class="circle" id="circle" cx="50" cy="50" r="47" stroke="#231f20" stroke-width="5" fill-opacity="0" />
+                <circle class="circle" id="circle" cx="50" cy="50" r="47" stroke="#231f20" stroke-width="5"
+                    fill-opacity="0" />
                 <text x="50%" y="50%" text-anchor="middle" fill="black" font-size="25px" font-family="Arial" dy=".3em"
                     id="timer">{{currentQuestion.AnsweredCount}}</text>
                 Sorry, your browser does not support inline SVG.
@@ -44,7 +46,13 @@
     </div>
 </div>
 <div *ngIf="statisticsView == true">
-    Statistics Stage<br/>
-    
+    Statistics Stage<br />
+    {{currentQuestion.QuestionText}}
+    <div class="row">
+        <span class="col-xs-6 choice" *ngFor="let currentChoice of currentQuestion.Choices">
+            {{currentChoice.Text}}
+        </span>
+    </div>
+    <button (click)="setNextQuestion()">Next Question</button>
 </div>
 <div *ngIf="resultView == true">Overall Result Stage</div>

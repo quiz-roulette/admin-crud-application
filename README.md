@@ -32,3 +32,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Herouku
 
 https://axperience-crud.herokuapp.com/
+
+## Resources:
+- http://jsfiddle.net/ns6dxtcy/1/
