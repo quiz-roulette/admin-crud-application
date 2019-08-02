@@ -1,5 +1,14 @@
+.onlineUserCount{
+  text-align: center;
+}
+
+.col-md-8, .col-md-2, .col-md-4{
+  text-align: center;
+}
 .choice {
   padding: 10px;
+  background-color: lightgray;
+  margin: 5px;
 }
 
 .circle {
@@ -26,4 +35,17 @@
   to {
     stroke-dashoffset: 0;
   }
+}
+
+.answeredCount{
+  transition: transform 0.1s; /* Animation */
+  transform-origin: center center
+}
+
+.correct{
+  background-color: #dff0d8;
+}
+
+.results{
+  margin: 10px;
 }

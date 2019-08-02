@@ -391,6 +391,10 @@ export class HTTPService {
         return this.http.get(`${this.AzureUrl}/api/quizDataByQuizId?QuizId=${quizId}`, this.options).toPromise().then(this.extractData);
     }
 
+    getQuizLogByQuizId(quizId){
+        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizId}`, this.options).toPromise().then(this.extractData);
+    }
+
     private extractData(res: Response) {
         let body = res.json();
         // console.log(body);
