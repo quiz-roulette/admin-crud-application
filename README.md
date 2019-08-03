@@ -35,3 +35,4 @@ https://axperience-crud.herokuapp.com/
 
 ## Resources:
 - http://jsfiddle.net/ns6dxtcy/1/
+- [Gradient Button](https://codepen.io/anon/pen/zgzXvr)
