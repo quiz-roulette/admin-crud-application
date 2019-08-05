@@ -1,15 +1,16 @@
-<h4 style="text-align: center">{{quizname | uppercase}}</h4>
-<div *ngIf="waitingView === true">
-    
+<h4 *ngIf="waitingView === false" style="text-align: center">Quiz Name: {{quizname | uppercase}}</h4>
+<div class="readyview" *ngIf="waitingView === true">
+    <h4 style="text-align: center">Quiz Name: {{quizname | uppercase}}
+    </h4>
     <!-- <svg width="100" height="100">
         <circle class="circle" id="circle" cx="50" cy="50" r="47" stroke="#231f20" stroke-width="5" fill-opacity="0" />
         <text x="50%" y="50%" text-anchor="middle" fill="black" font-size="25px" font-family="Arial" dy=".3em"
             id="timer"></text>
         Sorry, your browser does not support inline SVG.
     </svg> -->
-    <br/>
+    <br />
     <div class="onlineUserCount">Online Users: {{playerCount}}</div>
-    <br/>
+    <br />
     <button class="block" (click)="startQuiz()" [disabled]="readyText === 'Preparing...'">{{readyText}}</button>
 </div>
 <div class="container question" *ngIf="questionView === true">
@@ -62,7 +63,7 @@
                 <text x="50%" y="50%" text-anchor="middle" fill="black" font-size="25px" font-family="Arial" dy=".3em"
                     id="timer">{{currentQuestion.CountDownTimer}}</text>
             </svg>
-            <br/>
+            <br />
             <span class="belowSVG">Timer</span>
         </div>
         <div class="col-md-8">
@@ -70,7 +71,8 @@
             <img *ngIf="currentQuestion.QuestionImageURL" src="currentQuestion.QuestionImageURL" />
             <br />
             <div class="row">
-                <span style="text-align: left" class="col-xs-6 choice" *ngFor="let currentChoice of currentQuestion.Choices">
+                <span style="text-align: left" class="col-xs-6 choice"
+                    *ngFor="let currentChoice of currentQuestion.Choices">
                     {{currentChoice.Text}}
                 </span>
             </div>
@@ -84,7 +86,7 @@
                     id="timer" class="answeredCount" id="answeredCount">{{currentQuestion.AnsweredCount}}</text>
                 Sorry, your browser does not support inline SVG.
             </svg>
-            <br/>
+            <br />
             <span class="belowSVG">Users Answered</span>
         </div>
     </div>
@@ -130,17 +132,17 @@
                     <th>User</th>
                     <th>Score</th>
                 </tr>
-                <tr class="success">
+                <tr *ngIf="currentQuestion.top3CurrentQuestion.length >= 1" class="success">
                     <td>1</td>
                     <td>{{currentQuestion.top3CurrentQuestion[0].QuizUserId}}</td>
                     <td>250</td>
                 </tr>
-                <tr class="info">
+                <tr *ngIf="currentQuestion.top3CurrentQuestion.length >= 2" class="info">
                     <td>2</td>
                     <td>{{currentQuestion.top3CurrentQuestion[1].QuizUserId}}</td>
                     <td>250</td>
                 </tr>
-                <tr class="active">
+                <tr *ngIf="currentQuestion.top3CurrentQuestion.length >= 3" class="active">
                     <td>3</td>
                     <td>{{currentQuestion.top3CurrentQuestion[2].QuizUserId}}</td>
                     <td>250</td>
@@ -183,7 +185,8 @@
             <th>Score</th>
         </tr>
         <tr *ngFor="let item of overallResults; let i = index;">
-            <td>{{i+1}}</td>
+            <td class="winner" *ngIf="i==0">{{i+1}}</td>
+            <td *ngIf="i!=0">{{i+1}}</td>
             <td>{{item.QuizUserId}}</td>
             <td>{{item.Score}}</td>
         </tr>
