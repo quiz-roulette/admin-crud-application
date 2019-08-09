@@ -1,10 +1,55 @@
-.onlineUserCount{
+.readyview {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: #03001e;
+  background-position: 0 0;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #fdeff9, #ec38bc, #7303c0, #03001e);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #fdeff9, #ec38bc, #7303c0, #03001e);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: white;
+
+  animation: gradients 25s linear infinite;
+}
+
+@keyframes gradients {
+  0% {
+    background-position: 0 0;
+  }
+
+  25% {
+    background-position: 50% 0;
+  }
+
+  50% {
+    background-position: 90% 0;
+  }
+
+  60% {
+    background-position: 60%;
+  }
+
+  75% {
+    background-position: 40%;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.onlineUserCount {
   text-align: center;
 }
 
-.col-md-8, .col-md-2, .col-md-4{
+.col-md-8,
+.col-md-2,
+.col-md-4 {
   text-align: center;
 }
+
 .choice {
   padding: 10px;
   background-color: lightgray;
@@ -16,19 +61,19 @@
   stroke-dashoffset: 0;
 }
 
-.circle .animation{
+.circle .animation {
   stroke-dashoffset: 1000;
   animation: stroke 10s ease-out infinite;
 }
 
-.statistics .option{
+.statistics .option {
   width: 50px;
   height: 100px;
   background: gray;
-  -webkit-transition:width 300ms ease-in-out, height 300ms ease-in-out;
-  -moz-transition:width 300ms ease-in-out, height 300ms ease-in-out;
-  -o-transition:width 300ms ease-in-out, height 300ms ease-in-out;
-  transition:width 300ms ease-in-out, height 300ms ease-in-out;
+  -webkit-transition: width 300ms ease-in-out, height 300ms ease-in-out;
+  -moz-transition: width 300ms ease-in-out, height 300ms ease-in-out;
+  -o-transition: width 300ms ease-in-out, height 300ms ease-in-out;
+  transition: width 300ms ease-in-out, height 300ms ease-in-out;
 }
 
 @keyframes stroke {
@@ -37,15 +82,20 @@
   }
 }
 
-.answeredCount{
-  transition: transform 0.1s; /* Animation */
+.answeredCount {
+  transition: transform 0.1s;
+  /* Animation */
   transform-origin: center center
 }
 
-.correct{
+.correct {
   background-color: #dff0d8;
 }
 
-.results{
+.results {
   margin: 10px;
+}
+
+.winner {
+  background-color: #dff0d8;
 }

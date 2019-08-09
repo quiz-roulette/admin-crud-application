@@ -40,6 +40,7 @@ export class ControlledQuizComponent implements OnInit {
     public statisticsView: boolean;
     public resultView: boolean;
     public readyText;
+    private playerInterval;
     constructor(private http: HTTPService, private route: ActivatedRoute, private router: Router, private socket: Socket) {
         this.currentQuestion = null;
         this.waitingView = true;
@@ -66,6 +67,22 @@ export class ControlledQuizComponent implements OnInit {
                 currentContext.userAnsweredaQuestion(currentContext);
             }
         });
+
+        //dummy socket
+        this.socket.on("stop question", function(obj){
+            console.log("Successfully received: stop question");
+            console.log(obj);
+        });
+
+        this.socket.on("new question", function(obj){
+            console.log("Successfully received: new question");
+            console.log(obj);
+        });
+
+        this.socket.on("quiz ended", function(obj){
+            console.log("Successfully received: quiz ended");
+            console.log(obj);
+        });
     }
 
     loadData() {
@@ -78,28 +95,30 @@ export class ControlledQuizComponent implements OnInit {
 
             //dummydata
             console.log(this.choices);
-            this.usersAnswersForQuestions = new Array();
-            for (var i = 0; i < 100; i++) {
-                var ran = Math.random();
-                ran = ran > 0.5 ? 250 : 0;
-                var userId = Math.floor((Math.random() * 100) + 1);
-                var index = Math.floor((Math.random() * this.questions.length) + 1);
-                var choices = this.choices.filter(el => el.QuestionId === this.questions[index - 1].QuestionId)
-                var choiceIndex = Math.floor((Math.random() * choices.length) + 1);
-                console.log({
-                    QuestionId: this.questions[index - 1].QuestionId,
-                    ChoiceId: choices[choiceIndex - 1].ChoiceId
-                });
-                this.usersAnswersForQuestions.push({
-                    QuizUserId: "User "+userId,
-                    QuestionId: this.questions[index - 1].QuestionId,
-                    ChoiceId: choices[choiceIndex - 1].ChoiceId,
-                    Score: ran
-                })
+            // this.usersAnswersForQuestions = new Array();
+            // for (var i = 0; i < 100; i++) {
+            //     var ran = Math.random();
+            //     ran = ran > 0.5 ? 250 : 0;
+            //     var userId = Math.floor((Math.random() * 100) + 1);
+            //     var index = Math.floor((Math.random() * this.questions.length) + 1);
+            //     var choices = this.choices.filter(el => el.QuestionId === this.questions[index - 1].QuestionId)
+            //     var choiceIndex = Math.floor((Math.random() * choices.length) + 1);
+            //     console.log({
+            //         QuestionId: this.questions[index - 1].QuestionId,
+            //         ChoiceId: choices[choiceIndex - 1].ChoiceId
+            //     });
+            //     this.usersAnswersForQuestions.push({
+            //         QuizUserId: "User "+userId,
+            //         QuestionId: this.questions[index - 1].QuestionId,
+            //         ChoiceId: choices[choiceIndex - 1].ChoiceId,
+            //         Score: ran
+            //     })
 
-                this.readyText = "Get Started"
-            }
-            console.log(this.usersAnswersForQuestions);
+            //     this.readyText = "Get Started"
+            // }
+            // console.log(this.usersAnswersForQuestions);
+
+            this.readyText = "Get Started"
         })
 
 
@@ -195,14 +214,34 @@ export class ControlledQuizComponent implements OnInit {
             currentContext.currentQuestion.CountDownTimer--;
         }, 1000);
 
-        setInterval(function () {
-            currentContext.userAnsweredaQuestion(currentContext);
-        }, 2000)
+        // setInterval(function () {
+        //     currentContext.userAnsweredaQuestion(currentContext);
+        // }, 2000)
+
+        setInterval(function(){
+                var ran = Math.random();
+                ran = ran > 0.5 ? 250 : 0;
+                var userId = Math.floor((Math.random() * 100) + 1);
+                var index = Math.floor((Math.random() * currentContext.questions.length) + 1);
+                var choices = currentContext.choices.filter(el => el.QuestionId === currentContext.questions[index - 1].QuestionId)
+                var choiceIndex = Math.floor((Math.random() * choices.length) + 1);
+                console.log({
+                    QuestionId: currentContext.questions[index - 1].QuestionId,
+                    ChoiceId: choices[choiceIndex - 1].ChoiceId
+                });
+                var obj = {
+                    QuizUserId: "User "+userId,
+                    QuestionId: currentContext.questions[index - 1].QuestionId,
+                    ChoiceId: choices[choiceIndex - 1].ChoiceId,
+                    Score: ran
+                };
+                currentContext.socket.emit("question answered", obj);
+        }, 1000)
     }
 
     userAnsweredaQuestion(currentContext){
         if (currentContext.questionView) {
-            var num = this.usersAnswersForQuestions.filter(el => el.QuestionId === this.currentQuestion.QuestionId).length;
+            var num = this.usersAnswersForQuestions.filter(el => el.QuestionId === currentContext.currentQuestion.QuestionId).length;
             currentContext.currentQuestion.AnsweredCount = num;
             //not so dummy
             var el = document.getElementById("answeredCount");
@@ -217,7 +256,7 @@ export class ControlledQuizComponent implements OnInit {
 
     stopCurrentQuestion() {
         console.log("Lets show some stats");
-        this.socket.emit("Stop question", this.currentQuestion.QuestionId);
+        this.socket.emit("stop question", this.currentQuestion.QuestionId);
         this.questionView = false;
         this.statisticsView = true;
         console.log("Analysing Stuff")
