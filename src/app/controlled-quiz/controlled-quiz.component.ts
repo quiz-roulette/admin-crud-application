@@ -301,6 +301,7 @@ export class ControlledQuizComponent implements OnInit {
     showResults() {
         this.statisticsView = false;
         this.resultView = true;
+        this.socket.emit("stop quiz", this.quizname);
     }
 
 }
