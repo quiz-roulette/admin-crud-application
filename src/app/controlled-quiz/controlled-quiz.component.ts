@@ -151,6 +151,7 @@ export class ControlledQuizComponent implements OnInit {
             this.currentQuestionIndex = 0;
             //set first question
             this.currentQuestion = {
+                QuizId: this.quizname,
                 QuestionText: this.questions[this.currentQuestionIndex].Text,
                 QuestionImageURL: this.questions[this.currentQuestionIndex].ImageUrl,
                 QuestionId: this.questions[this.currentQuestionIndex].QuestionId,
@@ -165,6 +166,7 @@ export class ControlledQuizComponent implements OnInit {
             this.currentQuestionIndex = this.currentQuestionIndex + 1;
             //set first question
             this.currentQuestion = {
+                QuizId: this.quizname,
                 QuestionText: this.questions[this.currentQuestionIndex].Text,
                 QuestionImageURL: this.questions[this.currentQuestionIndex].ImageUrl,
                 QuestionId: this.questions[this.currentQuestionIndex].QuestionId,
@@ -233,7 +235,8 @@ export class ControlledQuizComponent implements OnInit {
                     QuizUserId: "User "+userId,
                     QuestionId: currentContext.questions[index - 1].QuestionId,
                     ChoiceId: choices[choiceIndex - 1].ChoiceId,
-                    Score: ran
+                    Score: ran,
+                    QuizId: this.quizname
                 };
                 currentContext.socket.emit("question answered", obj);
         }, 1000)

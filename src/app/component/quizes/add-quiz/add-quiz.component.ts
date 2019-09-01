@@ -41,6 +41,7 @@ export class AddQuizComponent implements OnInit {
             if (!format.test(name)) {
                 this.httpService.getCategoryQuestionCount(category).then((resobj) => {
                     if (resobj.Count >= questionCount) {
+                        if(questionCount == 0) questionCount = resobj.Count;
                         var quiz = {
                             QuizId: name,
                             CategoryName: category,
