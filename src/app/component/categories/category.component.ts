@@ -3,6 +3,7 @@ import { HTTPService } from '../../service/http.service';
 import { QuizUser } from '../../model/QuizUser';
 import { Result } from '../../model/Result';
 import { Category } from '../../model/category';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'categories',
@@ -15,7 +16,7 @@ export class CategoryComponent implements OnInit {
     newCategory: Category;
     result: Result;
 
-    constructor(private httpService: HTTPService) { }
+    constructor(private httpService: HTTPService, private router: Router) { }
 
     ngOnInit() {
         this.newCategory = new Category();
@@ -60,6 +61,10 @@ export class CategoryComponent implements OnInit {
         }).catch((err) => {
             this.result.updateError("Error!");
         });
+    }
+
+    controlQuiz(catName){
+        this.router.navigate(['controlledquiz/'+catName]);
     }
 
     updateResult(result: Result) {

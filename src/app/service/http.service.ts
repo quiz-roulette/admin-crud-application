@@ -387,6 +387,10 @@ export class HTTPService {
         return this.http.get(`${this.AzureUrl}/api/getQuestionCountForCategory?CategoryName=${categoryName}`, this.options).toPromise().then(this.extractData);
     }
 
+    setUpControlledQuiz(catName){
+        return this.http.post(`${this.AzureUrl}/api/setupControlledQuiz`, {CategoryName: catName}, this.options).toPromise().then(this.extractData);
+    }
+
     getQuizDataByQuizId(quizId){
         return this.http.get(`${this.AzureUrl}/api/quizDataByQuizId?QuizId=${quizId}`, this.options).toPromise().then(this.extractData);
     }
