@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'onetimequiz',component: OneTimeQuizComponent, canActivate:[UserGuard]},
   { path: 'dashboard/:quizname',component: DashboardComponent, canActivate:[UserGuard]},
   //TODO: remember to add canActivate later
-  { path: 'controlledquiz/:quizname',component: ControlledQuizComponent}
+  { path: 'controlledquiz/:catname',component: ControlledQuizComponent}
 ];
 
 @NgModule({

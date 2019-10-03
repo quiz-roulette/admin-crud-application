@@ -1,22 +1,32 @@
 <status [result]="result" (updatedResult)="updateResult($event)"></status>
 <form class="form-inline adduser">
     <div class="form-group">
-      <label for="exampleInputName2">Category Name</label>
-      <input type="text" class="form-control" id="exampleInputName2" placeholder="Round 1" [(ngModel)]="newCategory.CategoryName" name="categoryName">
+        <label for="exampleInputName2">Category Name</label>
+        <input type="text" class="form-control" id="exampleInputName2" placeholder="Round 1"
+            [(ngModel)]="newCategory.CategoryName" name="categoryName">
     </div>
     <button type="submit" class="btn btn-default" (click)="addCategory()">Add</button>
-  </form>
-It is used to group questions together. For instance, you want to add questions that belongs to category 'nature', then you should create category here.
+</form>
+It is used to group questions together. For instance, you want to add questions that belongs to category 'nature', then
+you should create category here.
 <table class="table">
     <thead>
         <th>Name</th>
+        <th>Action</th>
         <th>Action <span class="label label-danger">Any Question in category will be deleted!</span></th>
     </thead>
     <tbody>
         <tr *ngFor="let item of categories">
             <td>{{item.CategoryName}}</td>
             <td>
-                <button type="button" id="delete" class="btn btn-danger btn-sm" (click)="deleteCategory(item.CategoryName)">
+                <button type="button" id="controlled" class="btn btn-info btn-sm"
+                    (click)="controlQuiz(item.CategoryName)">
+                    Controlled Quiz
+                </button>
+            </td>
+            <td>
+                <button type="button" id="delete" class="btn btn-danger btn-sm"
+                    (click)="deleteCategory(item.CategoryName)">
                     <span class="glyphicon glyphicon-ban-circle"></span> Delete
                 </button>
             </td>
