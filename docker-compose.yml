@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  quiz_roulette_admin_crud_app:
+    image: "quizroulette/admin-crud-app:v1.0.0"
+    ports:
+      - "30000:3000"
+  quiz_roulette_question_bank_graphql:
+    image: "quizroulette/question-bank-graphql:v2.1.0"
+    ports:
+      - "34000:4000"

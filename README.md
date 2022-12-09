@@ -1,3 +1,18 @@
+# Quiz Roulette React CRUD
+CRUD Application for Question Bank
+
+
+### Docker Commands:
+
+```
+docker build -t quizroulette/admin-crud-app:v1.0.0 .
+```
+
+```
+docker push quizroulette/admin-crud-app:v1.0.0
+```
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
