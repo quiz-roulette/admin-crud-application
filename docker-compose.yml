@@ -4,6 +4,10 @@ services:
     image: "quizroulette/admin-crud-app:v1.0.0"
     ports:
       - "30000:3000"
+    environment:
+      - REACT_APP_QUIZ_BANK_QUESTIONS_URL=http://localhost:34000
+      - REACT_APP_QUIZ_BANK_QUESTIONS_ENDPOINT=/graphql
+
   quiz_roulette_question_bank_graphql:
     image: "quizroulette/question-bank-graphql:v2.1.0"
     ports:

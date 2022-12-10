@@ -6,7 +6,7 @@ import Table from 'react-bootstrap/Table';
 
 
 const client = axios.create({
-    baseURL: "http://localhost:34000/graphql"
+    baseURL: process.env.REACT_APP_QUIZ_BANK_QUESTIONS_URL + process.env.REACT_APP_QUIZ_BANK_QUESTIONS_ENDPOINT
 });
 
 const GET_LOCATIONS = `
