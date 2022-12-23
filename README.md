@@ -5,11 +5,11 @@ CRUD Application for Question Bank
 ### Docker Commands:
 
 ```
-docker build -t quizroulette/admin-crud-app:v1.0.0 .
+docker build -t quizroulette/admin-crud-app:v1.1.0 .
 ```
 
 ```
-docker push quizroulette/admin-crud-app:v1.0.0
+docker push quizroulette/admin-crud-app:v1.1.0
 ```
 
 
