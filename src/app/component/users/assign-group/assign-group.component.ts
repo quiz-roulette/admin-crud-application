@@ -66,7 +66,7 @@ export class AssignGroupComponent implements OnInit, OnDestroy {
 
     assign(){
         this.result.updateInfo("updating database...");
-        var groups = [];
+        var groups: Group[] = [];
         this.userGroups.forEach((el) => {
             if(el.Checked) groups.push(el.Name);
         })
@@ -80,7 +80,7 @@ export class AssignGroupComponent implements OnInit, OnDestroy {
     setCheckedValues() {
         this.result.updateInfo("Updating view...")
         this.groups.forEach((el) => {
-            var foundObj = null;
+            var foundObj: Group = new Group();
             this.checkedGroupsForUser.forEach((el1) => {
                 if (el.Name === el1.Name) {
                     foundObj = el1;

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Result } from '../model/Result';
 import { QuizUser } from '../model/QuizUser';
 import { HTTPService } from '../service/http.service';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
     moduleId: module.id,
@@ -12,13 +13,13 @@ import { HTTPService } from '../service/http.service';
 })
 
 export class AuthenticationComponent implements OnInit {
-    tab: string;
-    result: Result;
-    quizUser: QuizUser;
-    tandc: any = { checked: false};
+    tab!: string;
+    result!: Result;
+    quizUser!: QuizUser;
+    tandc: any = { checked: false };
 
     constructor(private router: Router,
-        private activatedRoute: ActivatedRoute, 
+        private activatedRoute: ActivatedRoute,
         private httpService: HTTPService) {
         this.init();
     }
@@ -32,8 +33,8 @@ export class AuthenticationComponent implements OnInit {
             if (params['tab']) this.tab = params['tab'];
         });
     }
-    ngOnInit() { 
-        if(localStorage.getItem('user')){
+    ngOnInit() {
+        if (localStorage.getItem('user')) {
             this.router.navigateByUrl('/questions');
         }
     }
@@ -43,18 +44,22 @@ export class AuthenticationComponent implements OnInit {
 
     login() {
         this.result.updateInfo("Logging in..")
-        this.httpService.Login(this.quizUser.QuizUserId, this.quizUser.Password).then(result => {
-            if (result == true) {
+        this.httpService.Login(this.quizUser.QuizUserId, this.quizUser.Password).subscribe(resultEvent => {
+            if (resultEvent.type === HttpEventType.Response) {
+                var result = resultEvent.body;
+
+                if (result == true) {
                     this.httpService.updateOptions();
-                    localStorage.setItem('user',this.quizUser.QuizUserId);
-                    localStorage.setItem('password',this.quizUser.Password);
+                    localStorage.setItem('user', this.quizUser.QuizUserId!);
+                    localStorage.setItem('password', this.quizUser.Password!);
                     this.result.updateSuccess(true);
                     this.router.navigateByUrl('/questions');
+                }
             }
-        }, error => this.result.updateError("Authentication Failed")).catch(err => this.result.updateError("Authentication Failed"));
+        }, error => this.result.updateError("Authentication Failed"), () => console.log("completed"));
     }
 
-    updateResult(result) {
+    updateResult(result: any) {
         this.result = result;
     }
 }
