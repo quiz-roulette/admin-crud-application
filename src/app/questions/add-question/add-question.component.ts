@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, SystemJsNgModuleLoader } from '@angular/core'
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { Result } from '../../model/Result'
 import { QuestionWrapper } from '../../model/questionWrapper'
 import { HTTPService } from '../../service/http.service'
 import { Category } from '../../model/category'
+import { HttpEventType } from '@angular/common/http'
 
 
 @Component({
@@ -11,36 +12,36 @@ import { Category } from '../../model/category'
 })
 
 export class AddQuestionComponent implements OnInit {
-    selectedCategory: string;
+    selectedCategory!: string;
     result: Result;
-    categories: Category[];
+    categories!: Category[];
     @Output() addedQuestion = new EventEmitter();
 
     constructor(private httpService: HTTPService) {
         this.result = new Result();
 
-        this.httpService.getAllCategories().then((data) => {
-            this.categories = data;
-            // console.log(this.categories);
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+        this.httpService.getAllCategories().subscribe((resultEvent: any) => {
+            if (resultEvent.type === HttpEventType.Response) {
+                var result = resultEvent.body;
+                this.categories = result;
+            }
+        })
 
     }
 
     ngOnInit() { }
 
-    addQuestion(text, imageurl, category, choice, correctchoice) {
+    addQuestion(text: any, imageurl: any, category: any, choice: any, correctchoice: any) {
         // console.log(text,imageurl);
         this.result.updateInfo("Adding question...");
         var questionWrapper = new QuestionWrapper();
         questionWrapper.Text = text.trim();
-        questionWrapper.setChoices(choice.split(";").map((item) => item.trim()));// = ;
+        questionWrapper.setChoices(choice.split(";").map((item: any) => item.trim()));// = ;
         questionWrapper.CategoryName = this.selectedCategory;
         questionWrapper.ImageUrl = imageurl;
         var el = questionWrapper.choice.find((el) => el.Text == correctchoice);
         if (el) {
-            questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.Text == correctchoice);
+            questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.Text == correctchoice)!;
             questionWrapper.correctChoiceText = correctchoice;
             console.log(questionWrapper)
             this.httpService.addQuestionWrapper(questionWrapper).then((res) => {
@@ -88,52 +89,50 @@ export class AddQuestionComponent implements OnInit {
         What is the full-form DHCP?[;]Dynamic Host Configuration Protocol;Dynamic Host Configuration Preparation;[;]Dynamic Host Configuration Protocol
         What is the full-form SSID?[;]Service Set Identification;Service Software Identification;[;]Service Set Identification`;
 
-        try {
-            this.selectedCategory = "Computer Networks"
-            if (!this.selectedCategory || this.selectedCategory == "") throw "Category Cannot be null or empty"
-            console.log(this.selectedCategory)
-            var textarray = bigtext.split('\n');
-            console.log(textarray.length)
-            var promises = [];
-            var questionwappers = [];
-            textarray.forEach(ele => {
-                console.log(ele);
-                var element = ele.split('[;]');
-                if (element.length == 3) {
-                    var text = element[0].trim();
-                    var choice = element[1];
-                    var correctchoice = element[2].trim();
-                    //this.addQuestion(element[0],null,'Computer',element[1],element[2]);
-                    var questionWrapper = new QuestionWrapper();
-                    questionWrapper.Text = text.trim();
-                    questionWrapper.setChoices(choice.split(";").map((item) => item.trim()));// = ;
-                    questionWrapper.CategoryName = this.selectedCategory;
-                    questionWrapper.ImageUrl = null;
-                    var el = questionWrapper.choice.find((el) => el.Text == correctchoice);
-                    if (el) {
-                        questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.Text == correctchoice);
-                        questionWrapper.correctChoiceText = correctchoice;
-                        questionwappers.push(questionWrapper);
-                    }
-                    else {
-                        throw "The option does not seem to match correct option"
-                    }
+
+        this.selectedCategory = "Computer Networks"
+        if (!this.selectedCategory || this.selectedCategory == "") throw "Category Cannot be null or empty"
+        console.log(this.selectedCategory)
+        var textarray = bigtext.split('\n');
+        console.log(textarray.length)
+        var promises: any = [];
+        var questionwappers: any = [];
+        textarray.forEach(ele => {
+            console.log(ele);
+            var element = ele.split('[;]');
+            if (element.length == 3) {
+                var text = element[0].trim();
+                var choice = element[1];
+                var correctchoice = element[2].trim();
+                //this.addQuestion(element[0],null,'Computer',element[1],element[2]);
+                var questionWrapper = new QuestionWrapper();
+                questionWrapper.Text = text.trim();
+                questionWrapper.setChoices(choice.split(";").map((item) => item.trim()));// = ;
+                questionWrapper.CategoryName = this.selectedCategory;
+                questionWrapper.ImageUrl = "";
+                var el = questionWrapper.choice.find((el) => el.Text == correctchoice);
+                if (el) {
+                    questionWrapper.correctChoice = questionWrapper.choice.find((el) => el.Text == correctchoice)!;
+                    questionWrapper.correctChoiceText = correctchoice;
+                    questionwappers.push(questionWrapper);
                 }
-            });
+                else {
+                    throw "The option does not seem to match correct option"
+                }
+            }
+        });
 
-            console.log(questionwappers.length);
-            console.log(questionwappers);
+        console.log(questionwappers.length);
+        console.log(questionwappers);
 
-            questionwappers.forEach((el) => {
-                promises.push(this.httpService.addQuestionWrapper(el));
-            })
+        // questionwappers.forEach((el) => {
+        //     promises.push(this.httpService.addQuestionWrapper(el));
+        // })
 
-            Promise.all(promises).then((res) => {
-                this.result.updateTextSuccess("All went okay!");
-            })
-        } catch (error) {
-            this.result.updateError(error);
-        }
+        // Promise.all(promises).then((res) => {
+        //     this.result.updateTextSuccess("All went okay!");
+        // })
+
     }
 
     updateResult(updatedResult: Result) {

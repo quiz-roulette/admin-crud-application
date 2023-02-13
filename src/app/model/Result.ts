@@ -1,9 +1,9 @@
 export class Result
 {
-    info: string;
-    error: string;
+    info: string | null | undefined;
+    error: string | null | undefined;
     success: boolean;
-    textSuccess: string;
+    textSuccess: string | null;
 
     constructor(error ?: string, info ?: string, success : boolean = false)
     {

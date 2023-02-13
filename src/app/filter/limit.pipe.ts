@@ -7,7 +7,7 @@ import { QuestionWrapper } from '../model/questionWrapper';
 })
 
 export class LimitPipe implements PipeTransform {
-    transform(values, args: string[]): any[] {
+    transform(values: any, args: string[]): any[] {
         console.log(args[1])
         values = values ? values : [];
         var min = 0;

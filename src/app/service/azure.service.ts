@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-declare var WindowsAzure;
+declare var WindowsAzure: { MobileServiceClient: new (arg0: string) => any; };
 
 @Injectable()
 export class AzureService {
@@ -14,9 +14,9 @@ export class AzureService {
         var current = this;
         return new Promise((resolve, reject) => {
             table.read()
-                .done(function (questions) {
+                .done(function (questions: any) {
                    resolve(questions);
-                }, function (error) { reject(error) });
+                }, function (error: any) { reject(error) });
         });
     }
 
@@ -25,9 +25,9 @@ export class AzureService {
         var current = this;
         return new Promise((resolve, reject) => {
             table.insert({ text: "new question", categoryId: "simaa"})
-                .done(function (newQuestion) {
+                .done(function (newQuestion: any) {
                    resolve(newQuestion);
-                }, function (error) { reject(error) });
+                }, function (error: any) { reject(error) });
         });
     }
 }

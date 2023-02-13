@@ -9,7 +9,7 @@ import { Result } from '../../model/Result';
 })
 
 export class StatusComponent implements OnInit {
-    @Input() result: Result;
+    @Input() result!: Result;
     @Output() updatedResult =  new EventEmitter();
 
     constructor() { }

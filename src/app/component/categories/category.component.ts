@@ -4,6 +4,7 @@ import { QuizUser } from '../../model/QuizUser';
 import { Result } from '../../model/Result';
 import { Category } from '../../model/category';
 import { Router } from '@angular/router';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
     selector: 'categories',
@@ -12,9 +13,9 @@ import { Router } from '@angular/router';
 })
 
 export class CategoryComponent implements OnInit {
-    categories: Category[];
-    newCategory: Category;
-    result: Result;
+    categories!: Category[];
+    newCategory!: Category;
+    result!: Result;
 
     constructor(private httpService: HTTPService, private router: Router) { }
 
@@ -26,45 +27,35 @@ export class CategoryComponent implements OnInit {
 
     getAllCategories() {
         this.result.updateInfo("Getting Categories...")
-        this.httpService.getAllCategories().then((result) => {
-            this.categories = result;
-            this.result.updateSuccess(true);
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+        this.httpService.getAllCategories().subscribe((resultEvent: any) => {
+            if (resultEvent.type === HttpEventType.Response) {
+                var result = resultEvent.body;
+                this.categories = result;
+                this.result.updateSuccess(true);
+            }
+        })
     }
 
     addCategory() {
         this.result.updateInfo("Adding Category...");
-        this.httpService.addCategory(this.newCategory).then((result) => {
-            if (result) {
-                this.categories.push(this.newCategory);
-                // this.httpService.assignUsersToGroup(this.newCategory.CategoryName).then((res) => {
-                //     console.log("Successfully added all users to the group.")
-
-                // });
-                this.newCategory = new Category();
-                this.result.updateSuccess(true);
-            }
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+        this.httpService.addCategory(this.newCategory).subscribe((resultEvent: any) => {
+            console.log("While adding category ", resultEvent)
+            this.categories.push(this.newCategory)
+            this.result.updateSuccess(true);
+        })
     }
 
-    deleteCategory(categoryName) {
+    deleteCategory(categoryName: any) {
         this.result.updateInfo("Deleting Category...");
-        this.httpService.deleteCategory(categoryName).then((result) => {
-            if (result) {
-                this.result.updateTextSuccess("Deleted User Successfully");
-                this.getAllCategories();
-            }
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+        this.httpService.deleteCategory(categoryName).subscribe((resultEvent: any) => {
+            console.log("While deleting category ", resultEvent)
+            this.result.updateTextSuccess("Deleted User Successfully");
+            this.getAllCategories();
+        })
     }
 
-    controlQuiz(catName){
-        this.router.navigate(['controlledquiz/'+catName]);
+    controlQuiz(catName: any) {
+        this.router.navigate(['controlledquiz/' + catName]);
     }
 
     updateResult(result: Result) {

@@ -20,6 +20,7 @@ export class SearchPipe implements PipeTransform {
                 if(el.Text.includes(search) || el.CategoryName.includes(search)){
                     return el;
                 }
+                return null;
             })
         }
         

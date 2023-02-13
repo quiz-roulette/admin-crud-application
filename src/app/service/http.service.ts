@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, Headers } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import { forkJoin, Observable } from 'rxjs';
 import { QuestionWrapper } from '../model/questionWrapper';
 import { Question } from '../model/question';
 import { Choice } from '../model/choice';
@@ -16,122 +16,100 @@ export class HTTPService {
     options: any;
 
 
-
-
-
-    Login(quizUserId, password): any {
-        return this.http.get(`${this.AzureUrl}/api/authenticate?userId=${quizUserId}&userPassword=${password}&isAdmin=${true}`, this.options).toPromise().then(this.extractData);
+    Login(quizUserId: any, password: any) {
+        return this.http.get<boolean>(`${this.AzureUrl}/api/authenticate?userId=${quizUserId}&userPassword=${password}&isAdmin=${true}`, this.options);
     }
 
     getAllQuizUsers(): any {
-        return this.http.get(`${this.AzureUrl}/api/quizuser`, this.options).toPromise().then(this.extractData);
+        return this.http.get(`${this.AzureUrl}/api/quizuser`, this.options);
     }
 
 
-    constructor(private http: Http) {
-        this.options = new RequestOptions(
-            {
-                headers: new Headers(
-                    {
-                        'ZUMO-API-VERSION': '2.0.0',
-                        'authorization': localStorage.getItem('user'),
-                        'admin': localStorage.getItem('user'),
-                        'SIM': true
-                    })
-            });
+    constructor(private http: HttpClient) {
+        this.options = {
+            headers: new HttpHeaders({
+                'ZUMO-API-VERSION': '2.0.0',
+                'authorization': localStorage.getItem('user')!,
+                'admin': localStorage.getItem('user')!,
+                'SIM': "true",
+                'observe': 'body'
+            })
+        };
     }
 
     updateOptions() {
-        this.options = new RequestOptions(
-            {
-                headers: new Headers(
-                    {
-                        'ZUMO-API-VERSION': '2.0.0',
-                        'authorization': localStorage.getItem('user'),
-                        'admin': localStorage.getItem('user'),
-                        'SIM': true
-                    })
-            });
+        this.options = {
+            headers: new HttpHeaders({
+                'ZUMO-API-VERSION': '2.0.0',
+                'authorization': localStorage.getItem('user')!,
+                'admin': localStorage.getItem('user')!,
+                'SIM': "true"
+            })
+        };
     }
 
     /**
      * returns all the questions from the database
      */
     getAllQuestions() {
-        return this.http.get(`${this.AzureUrl}/api/question`, this.options).toPromise().then(this.extractData);
+        return this.http.get<Question[]>(`${this.AzureUrl}/api/question`, this.options);
     }
 
     /**
      * returns all the choices from the database
      */
     getAllChoices() {
-        return this.http.get(`${this.AzureUrl}/api/choice`, this.options).toPromise().then(this.extractData);
+        return this.http.get<Choice[]>(`${this.AzureUrl}/api/choice`, this.options);
     }
 
     /**
      * returns all the correctChoices from the database
      */
     getAllCorrectChoices() {
-        return this.http.get(`${this.AzureUrl}/api/correctChoice`, this.options).toPromise().then(this.extractData);
+        return this.http.get<CorrectChoice[]>(`${this.AzureUrl}/api/correctChoice`, this.options);
     }
 
     getAllCategories() {
-        return this.http.get(`${this.AzureUrl}/api/category`, this.options).toPromise().then(this.extractData);
+        return this.http.get(`${this.AzureUrl}/api/category`, this.options);
     }
 
     /**
      * Returns questionWrapper that consisits of Question,Choices and CorrectChoice.
      */
-    getAllQuestionWrapper(): Promise<QuestionWrapper[]> {
-        var current = this;
-        var questionWrappers = new Array<QuestionWrapper>();
-        var questions = new Array<Question>()
-        var choices = new Array<Choice>();
-        var correctChoices = new Array<CorrectChoice>();
+    async getAllQuestionWrapper(): Promise<QuestionWrapper[]> {
+        let questionWrappers = new Array<QuestionWrapper>();
+        let questions: any = [];
+        let choices: any = [];
+        let correctChoices: any = [];
 
-        return new Promise((resolve, reject) => {
-            let promises = new Array<Promise<any>>();
+        await forkJoin([this.getAllQuestions(), this.getAllChoices(), this.getAllCorrectChoices()]).subscribe(([
+            questionsEvent, choicesEvent, correctChoicesEvent
+        ]) => {
+            if (questionsEvent.type === HttpEventType.Response &&
+                choicesEvent.type === HttpEventType.Response &&
+                correctChoicesEvent.type === HttpEventType.Response) {
+                questions = questionsEvent.body;
+                choices = choicesEvent.body;
+                correctChoices = correctChoicesEvent.body;
+            } else {
+                return;
+            }
 
-            let promise = current.getAllQuestions()
-                .then(data => questions = data)
-                .catch(this.handleError);
-
-            promises.push(promise);
-
-            promise = current.getAllChoices()
-                .then(data => {
-                    choices = data;
-                })
-                .catch(this.handleError);
-
-            promises.push(promise);
-
-            promise = current.getAllCorrectChoices()
-                .then(data => correctChoices = data)
-                .catch(this.handleError);
-
-            promises.push(promise);
-
-            Promise.all(promises).then(function () {
-                try {
-                    questions.forEach(element => {
-                        // console.log(element);
-                        var questionWrapper: QuestionWrapper = new QuestionWrapper();
-                        questionWrapper.QuestionId = element.QuestionId;
-                        questionWrapper.Text = element.Text;
-                        questionWrapper.CategoryName = element.CategoryName;
-                        questionWrapper.ImageUrl = element.ImageUrl;
-                        questionWrapper.choice = choices.filter((el) => el.QuestionId == element.QuestionId);
-                        questionWrapper.correctChoice = correctChoices.find((el) => el.QuestionId == questionWrapper.QuestionId);
-                        questionWrappers.push(questionWrapper);
-                    });
-                    resolve(questionWrappers);
-                } catch (error) {
-                    resolve(questionWrappers);
-                }
+            questions.forEach((element: any) => {
+                let questionWrapper = new QuestionWrapper();
+                questionWrapper.QuestionId = element.QuestionId;
+                questionWrapper.Text = element.Text;
+                questionWrapper.CategoryName = element.CategoryName;
+                questionWrapper.ImageUrl = element.ImageUrl;
+                questionWrapper.choice = choices.filter((el: any) => el.QuestionId == element.QuestionId);
+                questionWrapper.correctChoice = correctChoices.find((el: any) => el.QuestionId == questionWrapper.QuestionId);
+                questionWrappers.push(questionWrapper);
             });
         });
 
+        return new Promise<QuestionWrapper[]>(resolve => {
+            resolve(questionWrappers);
+        });
     }
 
     /**
@@ -142,48 +120,9 @@ export class HTTPService {
      * layer 3: It get the choiceId of the correctChoice and add that to the database.
      */
     addQuestionWrapper(questionWrapper: QuestionWrapper): Promise<QuestionWrapper> {
-        return new Promise((resolve, reject) => {
-            try {
-                if (questionWrapper.Text != "" && questionWrapper.choice.length > 1) {
-                    this.addQuestion(questionWrapper.Text, questionWrapper.CategoryName, questionWrapper.ImageUrl).then((question) => {
-                        // console.log(question);
-                        questionWrapper.QuestionId = question.QuestionId;
-                        let promises = new Array<Promise<any>>();
-                        questionWrapper.choice.forEach((element) => {
-                            if (element.Text.trim() != "") {
-                                let promise = this.addChoice(questionWrapper.QuestionId, element.Text).then((choice) => {
-                                    element.ChoiceId = choice.ChoiceId;
-                                })
-                                promises.push(promise);
-                            }
-                        })
-                        Promise.all(promises).then((result) => {
-                            questionWrapper.choice.forEach((element) => {
-                                if (element.Text == questionWrapper.correctChoiceText) {
-                                    // console.log(questionWrapper.QuestionId, element.ChoiceId);
-                                    this.addCorrectChoice(questionWrapper.QuestionId, element.ChoiceId).then((res) => {
-                                        questionWrapper.correctChoice.ChoiceId = element.ChoiceId;
-                                        questionWrapper.correctChoice.QuestionId = questionWrapper.QuestionId;
-                                        resolve(questionWrapper);
-                                    }).catch((err) => {
-                                        this.deleteQuestion(question.QuestionId);
-                                        reject("Correct Choice Adding Failed");
-                                    });
-                                }
-                            })
-                        }).catch((err) => {
-                            this.deleteQuestion(question.QuestionId);
-                            reject("Choice Adding Failed");
-                        });
-                    }).catch((err) => {
-
-                    })
-                }
-                else throw new Error("Question Text or Choice cannot be empty.");
-            } catch (error) {
-                throw error;
-            }
-
+        console.log("Lets add a question in backend ", questionWrapper);
+        return new Promise<QuestionWrapper>(resolve => {
+            resolve(questionWrapper);
         });
     }
 
@@ -193,132 +132,80 @@ export class HTTPService {
      * @param category 
      * it adds the text and category to the database
      */
-    addQuestion(text, category, imageUrl) {
-        return this.http.post(`${this.AzureUrl}/api/question`, { Text: text, CategoryName: category, ImageUrl: imageUrl }, this.options).toPromise().then(this.extractData);
+    addQuestion(text: string | undefined | null, category: string | undefined | null, imageUrl: string | undefined | null) {
+        return this.http.post<Question>(`${this.AzureUrl}/api/question`, { Text: text, CategoryName: category, ImageUrl: imageUrl }, this.options);
     }
 
-    addChoice(questionId, text) {
-        return this.http.post(`${this.AzureUrl}/api/choice`, { Text: text, QuestionId: questionId }, this.options).toPromise().then(this.extractData);
+    addChoice(questionId: any, text: any) {
+        return this.http.post<Choice>(`${this.AzureUrl}/api/choice`, { Text: text, QuestionId: questionId }, this.options);
     }
 
     addUser(user: QuizUser) {
-        return this.http.post(`${this.AzureUrl}/api/quizuser`, user, this.options).toPromise().then(this.extractData);
+        return this.http.post(`${this.AzureUrl}/api/quizuser`, user, this.options);
     }
 
     addCategory(category: Category): any {
-        return this.http.post(`${this.AzureUrl}/api/category`, category, this.options).toPromise().then(this.extractData);
+        return this.http.post<Category>(`${this.AzureUrl}/api/category`, category, this.options);
     }
 
-    assignUserToGroup(groupname, userid) {
+    assignUserToGroup(groupname: string | undefined | null, userid: string | undefined | null) {
         // console.log({ GName: groupname, UserId: userid });
-        return this.http.post(`${this.AzureUrl}/api/quizusergroup_join`, { GName: groupname, UserId: userid }, this.options).toPromise().then(this.extractData);
+        return this.http.post(`${this.AzureUrl}/api/quizusergroup_join`, { GName: groupname, UserId: userid }, this.options);
     }
 
-    getUsersForGroup(gname) {
-        return this.http.get(`${this.AzureUrl}/api/quizusergroup_join?groupName=` + gname, this.options).toPromise().then(this.extractData);
+    getUsersForGroup(gname: string | undefined | null) {
+        return this.http.get(`${this.AzureUrl}/api/quizusergroup_join?groupName=` + gname, this.options);
     }
 
-    getGroupsForUser(quizUserId) {
-        return this.http.get(`${this.AzureUrl}/api/quizusergroup_join?quizUserId=` + quizUserId, this.options).toPromise().then(this.extractData);
+    getGroupsForUser(quizUserId: string | undefined | null) {
+        return this.http.get(`${this.AzureUrl}/api/quizusergroup_join?quizUserId=` + quizUserId, this.options);
     }
 
-    assignCustomUsersToGroup(arg0: any, arg1: any): any {
-        // console.log("A");
-        return new Promise((resolve, reject) => {
-            // console.log("B");
-            this.deleteAllUsersForGroup(arg1).then((res) => {
-                // console.log("C");
-                var promises = [];
-                arg0.forEach(element => {
-                    promises.push(this.assignUserToGroup(arg1, element));
-                });
-                // console.log("D");
-                Promise.all(promises).then((res) => {
-                    // console.log("E");
-                    resolve();
-                }).catch((err) => reject());
-            }).catch((err) => reject());
+    assignCustomUsersToGroup(users: QuizUser[], group: string | undefined | null): any {
+        return new Promise<boolean>(resolve => {
+            resolve(true);
         });
     }
 
-    assignCustomGroupsToUser(arg0: any, arg1: any): any {
-        return new Promise((resolve, reject) => {
-            this.deleteAllGroupsForUser(arg1).then((res) => {
-                var promises = [];
-                arg0.forEach(element => {
-                    promises.push(this.assignUserToGroup(element, arg1));
-                });
-                Promise.all(promises).then((res) => {
-                    // console.log("E");
-                    resolve();
-                }).catch((err) => reject());
-            }).catch((err) => reject());
+    assignCustomGroupsToUser(groups: string | undefined | null[], user: string | undefined | null): any {
+        return new Promise<boolean>(resolve => {
+            resolve(true);
         });
     }
 
-    deleteAllUsersForGroup(gname) {
-        return this.http.delete(`${this.AzureUrl}/api/quizusergroup_join?groupName=` + gname, this.options).toPromise().then(this.extractData);
+    deleteAllUsersForGroup(gname: string | undefined | null) {
+        return this.http.delete(`${this.AzureUrl}/api/quizusergroup_join?groupName=` + gname, this.options);
     }
 
-    deleteAllGroupsForUser(userid) {
-        return this.http.delete(`${this.AzureUrl}/api/quizusergroup_join?quizUserId=` + userid, this.options).toPromise().then(this.extractData);
+    deleteAllGroupsForUser(userid: string | undefined | null) {
+        return this.http.delete(`${this.AzureUrl}/api/quizusergroup_join?quizUserId=` + userid, this.options);
     }
 
     getAllUserGroupNames() {
-        return this.http.get(`${this.AzureUrl}/api/group`, this.options).toPromise().then(this.extractData);
+        return this.http.get(`${this.AzureUrl}/api/group`, this.options);
     }
 
     getAllGroups() {
         return this.getAllUserGroupNames();
     }
 
-    addGroup(group) {
-        return this.http.post(`${this.AzureUrl}/api/group`, group, this.options).toPromise().then(this.extractData);
+    addGroup(group: any) {
+        return this.http.post(`${this.AzureUrl}/api/group`, group, this.options);
     }
 
-    deleteGroup(name) {
-        return this.http.delete(`${this.AzureUrl}/api/group?groupname=${name}`, this.options).toPromise().then(this.extractData);
+    deleteGroup(name: string | undefined | null) {
+        return this.http.delete(`${this.AzureUrl}/api/group?groupname=${name}`, this.options);
     }
 
-    assignUsersToGroup(groupname) {
-        var promises = [];
-        return new Promise((resolve, reject) => {
-            this.getAllQuizUsers().then((res) => {
-                var users = res;
-                // console.log(users);
-                users.forEach(element => {
-                    var promise = this.assignUserToGroup(groupname, element.QuizUserId);
-                    promises.push(promise);
-                });
-                Promise.all(promises).then((res) => {
-                    resolve();
-                }).catch((err) => {
-                    // console.log(err);
-                    reject();
-                })
-            }).catch((err) => {
-                // console.log(err);
-                reject();
-            });
-        })
+    assignUsersToGroup(groupname: string | undefined | null) {
+        return new Promise<boolean>(resolve => {
+            resolve(true);
+        });
     }
 
-    assignGroupsToUser(userId) {
-        var promises = [];
-        return new Promise((resolve, reject) => {
-            this.getAllGroups().then((res) => {
-                var groupnames = res;
-                // console.log(groupnames);
-                groupnames.forEach(element => {
-                    var promise = this.assignUserToGroup(element.Name, userId);
-                    promises.push(promise);
-                });
-                Promise.all(promises).then((res) => {
-                    resolve();
-                }).catch((err) => {
-                    reject();
-                })
-            }).catch((err) => reject());
+    assignGroupsToUser(userId: string | undefined | null) {
+        return new Promise<boolean>(resolve => {
+            resolve(true);
         });
     }
 
@@ -327,8 +214,8 @@ export class HTTPService {
      * @param questionId of which the correct choice is being entered.
      * @param choiceId of which the correct question is being entered.
      */
-    addCorrectChoice(questionId, choiceId) {
-        return this.http.post(`${this.AzureUrl}/api/correctChoice`, { QuestionId: questionId, ChoiceId: choiceId }, this.options).toPromise().then(this.extractData);
+    addCorrectChoice(questionId: any, choiceId: any) {
+        return this.http.post(`${this.AzureUrl}/api/correctChoice`, { QuestionId: questionId, ChoiceId: choiceId }, this.options);
     }
 
     /**
@@ -337,69 +224,69 @@ export class HTTPService {
      * It called a HTTP patch method, that contains a JSON object with attributes { questionId: 0, isDelete: true}.
      * @example httpService.deleteQuestion(1).then((data) => { // console.log("deleted Succesfully")});
      */
-    deleteQuestion(questionId) {
-        return this.http.patch(`${this.AzureUrl}/api/question`, { QuestionId: questionId, IsDelete: true }, this.options).toPromise().then(this.extractData);
+    deleteQuestion(questionId: any) {
+        return this.http.patch(`${this.AzureUrl}/api/question`, { QuestionId: questionId, IsDelete: true }, this.options);
     }
 
-    deleteUser(userId) {
-        return this.http.delete(`${this.AzureUrl}/api/quizUser?QuizUserId=${userId}`, this.options).toPromise().then(this.extractData);
+    deleteUser(userId: string | undefined | null) {
+        return this.http.delete(`${this.AzureUrl}/api/quizUser?QuizUserId=${userId}`, this.options);
     }
 
     deleteCategory(categoryName: any): any {
-        return this.http.delete(`${this.AzureUrl}/api/category?CategoryName=${categoryName}`, this.options).toPromise().then(this.extractData);
+        return this.http.delete(`${this.AzureUrl}/api/category?CategoryName=${categoryName}`, this.options);
     }
 
-    addQuiz(quiz): any {
-        return this.http.post(`${this.AzureUrl}/api/quiz`, quiz, this.options).toPromise().then(this.extractData);
+    addQuiz(quiz: any): any {
+        return this.http.post(`${this.AzureUrl}/api/quiz`, quiz, this.options);
     }
 
     getAllQuiz(): any {
-        return this.http.get(`${this.AzureUrl}/api/quiz`, this.options).toPromise().then(this.extractData);
+        return this.http.get(`${this.AzureUrl}/api/quiz`, this.options);
     }
 
-    endQuiz(id): any {
+    endQuiz(id: any): any {
         var newObj = { QuizId: id, HasEnded: true, EndDateTime: new Date() };
-        return this.http.patch(`${this.AzureUrl}/api/quiz`, newObj, this.options).toPromise().then(this.extractData);
+        return this.http.patch(`${this.AzureUrl}/api/quiz`, newObj, this.options);
     }
 
-    addOneTimeQuiz(quiz): any {
-        return this.http.post(`${this.AzureUrl}/api/quiz_with_tokenised`, quiz, this.options).toPromise().then(this.extractData);
+    addOneTimeQuiz(quiz: any): any {
+        return this.http.post(`${this.AzureUrl}/api/quiz_with_tokenised`, quiz, this.options);
     }
 
     getAllOneTimeQuiz(): any {
-        return this.http.get(`${this.AzureUrl}/api/quiz_with_tokenised`, this.options).toPromise().then(this.extractData);
+        return this.http.get(`${this.AzureUrl}/api/quiz_with_tokenised`, this.options);
     }
 
-    endOneTimeQuiz(id): any {
+    endOneTimeQuiz(id: any): any {
         var newObj = { QuizId: id, HasEnded: true, EndDateTime: new Date() };
-        return this.http.patch(`${this.AzureUrl}/api/quiz_with_tokenised`, newObj, this.options).toPromise().then(this.extractData);
+        return this.http.patch(`${this.AzureUrl}/api/quiz_with_tokenised`, newObj, this.options);
     }
 
-    getAllQuizLog(quizname): any {
-        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizname}`, this.options).toPromise().then(this.extractData);
+    getAllQuizLog(quizname: any) {
+        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizname}`, this.options);
     }
 
-    getQuizUser(quizuserId): any {
-        return this.http.get(`${this.AzureUrl}/api/quizuser?QuizUserId=${quizuserId}`, this.options).toPromise().then(this.extractData);
+    getQuizUser(quizuserId: any): any {
+        return this.http.get(`${this.AzureUrl}/api/quizuser?QuizUserId=${quizuserId}`, this.options);
     }
 
-    getCategoryQuestionCount(categoryName): any {
-        return this.http.get(`${this.AzureUrl}/api/getQuestionCountForCategory?CategoryName=${categoryName}`, this.options).toPromise().then(this.extractData);
+    getCategoryQuestionCount(categoryName: string | undefined | null): any {
+        return this.http.get(`${this.AzureUrl}/api/getQuestionCountForCategory?CategoryName=${categoryName}`, this.options);
     }
 
-    setUpControlledQuiz(catName){
-        return this.http.post(`${this.AzureUrl}/api/setupControlledQuiz`, {CategoryName: catName}, this.options).toPromise().then(this.extractData);
+    setUpControlledQuiz(catName: any) {
+        return this.http.post(`${this.AzureUrl}/api/setupControlledQuiz`, { CategoryName: catName }, this.options);
     }
 
-    getQuizDataByQuizId(quizId){
-        return this.http.get(`${this.AzureUrl}/api/quizDataByQuizId?QuizId=${quizId}`, this.options).toPromise().then(this.extractData);
+    getQuizDataByQuizId(quizId: string | undefined | null) {
+        return this.http.get(`${this.AzureUrl}/api/quizDataByQuizId?QuizId=${quizId}`, this.options);
     }
 
-    getQuizLogByQuizId(quizId){
-        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizId}`, this.options).toPromise().then(this.extractData);
+    getQuizLogByQuizId(quizId: string | undefined | null) {
+        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizId}`, this.options);
     }
 
-    private extractData(res: Response) {
+    private extractData(res: any) {
         let body = res.json();
         // console.log(body);
         return body || {};

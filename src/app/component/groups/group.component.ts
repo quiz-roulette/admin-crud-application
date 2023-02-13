@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTPService } from '../../service/http.service';
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
 import { Result } from '../../model/Result';
 import { Group } from '../../model/Group';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
     selector: 'group',
@@ -11,60 +12,62 @@ import { Group } from '../../model/Group';
 })
 
 export class GroupComponent implements OnInit {
-    groups: Group[];
-    newGroup: Group;
-    result: Result;
+    groups!: Group[];
+    newGroup!: Group;
+    result!: Result;
 
-    constructor(private httpService:HTTPService, private router: Router) { }
+    constructor(private httpService: HTTPService, private router: Router) { }
 
-    ngOnInit() { 
+    ngOnInit() {
         this.newGroup = new Group();
         this.result = new Result();
         this.getAllGroups();
     }
 
-    getAllGroups(){
+    getAllGroups() {
         this.result.updateInfo("Getting groups...")
-        this.httpService.getAllGroups().then((result) => {
-            this.groups = result;
-            this.result.updateSuccess(true);
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+        this.httpService.getAllGroups().subscribe((resultEvent: any) => {
+            console.log("Get All Groups ", resultEvent)
+            if (resultEvent.type === HttpEventType.Response) {
+                var result = resultEvent.body;
+                this.groups = result;
+                this.result.updateSuccess(true);
+            }
+        })
     }
 
-    addGroup(){
+    addGroup() {
         this.result.updateInfo("Adding new Group...");
         // console.log(this.newGroup);
-        this.httpService.addGroup(this.newGroup).then((result) => {
+        this.httpService.addGroup(this.newGroup).subscribe((resultEvent: any) => {
             // console.log(result);
-            if(result){
+            console.log("Add Group ", resultEvent)
+            if (resultEvent.type === HttpEventType.Response) {
+                var result = resultEvent.body;
                 this.groups.push(this.newGroup);
                 this.newGroup = new Group();
                 this.result.updateSuccess(true);
             }
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+        })
     }
 
-    deleteGroup(categoryName){
-            this.result.updateInfo("Deleting group...");
-            this.httpService.deleteGroup(categoryName).then((result) => {
-                if(result){
-                    this.result.updateTextSuccess("Deleted group Successfully");
-                    this.getAllGroups();
-                }
-            }).catch((err) => {
-                this.result.updateError("Error!");
-            });
+    deleteGroup(categoryName: any) {
+        this.result.updateInfo("Deleting group...");
+        this.httpService.deleteGroup(categoryName).subscribe((resultEvent: any) => {
+            console.log("Deleting Group ", resultEvent)
+            if (resultEvent.type === HttpEventType.Response) {
+                var result = resultEvent.body;
+                this.result.updateTextSuccess("Deleted group Successfully");
+                this.getAllGroups();
+            }
+        })
     }
 
-    assignUsers(groupName){
+    assignUsers(groupName: any) {
         this.router.navigate(['/assign-users', groupName]);
     }
 
-    updateResult(result: Result){
+    updateResult(result: Result) {
         this.result = result;
     }
 }

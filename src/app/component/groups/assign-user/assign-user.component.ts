@@ -3,8 +3,8 @@ import { Result } from '../../../model/Result';
 import { QuizUser, QuizUserCheck } from '../../../model/QuizUser';
 import { Group } from '../../../model/Group';
 import { HTTPService } from '../../../service/http.service';
-import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
     selector: 'assign-user',
@@ -19,29 +19,29 @@ export class AssignUserComponent implements OnInit, OnDestroy {
     checkedQuizUsers: QuizUser[];
     checkedList: string[];
     quizUserCheck: QuizUserCheck[];
-    group: Group;
+    group!: Group;
     result: Result;
-    private sub: Subscription;
-    public groupId: string;
+    public groupId!: string;
 
     ngOnInit() {
-        // assign the subscription to a variable so we can unsubscribe to prevent memory leaks
-        this.sub = this.route.params.subscribe((params: Params) => {
-            this.groupId = params['groupname'];
-            // console.log(params);
-        });
+        this.groupId = this.route.snapshot.paramMap.get("groupname")!
+
 
         this.result.updateInfo("Getting Users...")
-        this.http.getAllQuizUsers().then((res) => {
-            this.quizUsers = res;
-            this.result.updateInfo("Getting Users from this group...")
-            this.http.getUsersForGroup(this.groupId).then((res1) => {
-                this.checkedQuizUsers = res1;
-                this.setCheckedValues();
-            });
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+        this.http.getAllQuizUsers().subscribe((resultEvent: any) => {
+            if (resultEvent.type === HttpEventType.Response) {
+                var res = resultEvent.body;
+                this.quizUsers = res;
+                this.result.updateInfo("Getting Users from this group...")
+                this.http.getUsersForGroup(this.groupId).subscribe((resultEvent1: any) => {
+                    if (resultEvent1.type === HttpEventType.Response) {
+                        var res1 = resultEvent1.body;
+                        this.checkedQuizUsers = res1;
+                        this.setCheckedValues();
+                    }
+                });
+            }
+        })
     }
 
     constructor(private http: HTTPService, private route: ActivatedRoute, private router: Router) {
@@ -52,36 +52,34 @@ export class AssignUserComponent implements OnInit, OnDestroy {
         this.quizUserCheck = [];
     }
 
-    onCheckboxChange(option, event) {
-        var newCheckUser = [];
+    onCheckboxChange(option: any, event: any) {
+        var newCheckUser:any = [];
         this.quizUserCheck.forEach((el) => {
             if (el.QuizUserId === option.QuizUserId) {
-                newCheckUser.push(new QuizUserCheck(el.QuizUserId,event.target.checked));
+                newCheckUser.push(new QuizUserCheck(el.QuizUserId, event.target.checked));
             }
-            else{
-                newCheckUser.push(new QuizUserCheck(el.QuizUserId,el.Checked));
+            else {
+                newCheckUser.push(new QuizUserCheck(el.QuizUserId, el.Checked));
             }
         });
         this.quizUserCheck = newCheckUser;
     }
 
-    assign(){
+    assign() {
         this.result.updateInfo("updating database...");
-        var users = [];
+        var users: any = [];
         this.quizUserCheck.forEach((el) => {
-            if(el.Checked) users.push(el.QuizUserId);
+            if (el.Checked) users.push(el.QuizUserId);
         })
-        this.http.assignCustomUsersToGroup(users,this.groupId).then((res) => {
+        this.http.assignCustomUsersToGroup(users, this.groupId).subscribe((resultEvent: any) => {
             this.result.updateSuccess(true);
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+        })
     }
 
     setCheckedValues() {
         this.result.updateInfo("Updating view...")
         this.quizUsers.forEach((el) => {
-            var foundObj = null;
+            var foundObj: QuizUser = new QuizUser();
             this.checkedQuizUsers.forEach((el1) => {
                 if (el.QuizUserId === el1.QuizUserId) {
                     foundObj = el1;

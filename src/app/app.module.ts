@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HTTPService } from './service/http.service';
 import { QuestionComponent } from './questions/question.component';
-import { Http, HttpModule } from '@angular/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AzureService } from './service/azure.service';
 import { StatusComponent } from './component/status/status.component';
 import {AppRoutingModule, routableComponents } from './app-routing.module';
@@ -16,7 +16,7 @@ import { UserGuard } from './guard/User.guard';
 import { NavbarComponent } from './component/navbar/navbar.component';
 import { AddQuizComponent } from './component/quizes/add-quiz/add-quiz.component';
 
-import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { AddOneTimeQuizComponent } from './component/one-time-quiz/add-one-time-quiz/add-one-time-quiz.component';
 import { NotFoundComponent } from './component/not-found/NotFound.Component';
 const config: SocketIoConfig = { url: 'https://axperience.herokuapp.com/', options: {} };
@@ -33,7 +33,7 @@ const config: SocketIoConfig = { url: 'https://axperience.herokuapp.com/', optio
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     FormsModule,
     AppRoutingModule,
     PipeModule.forRoot(),

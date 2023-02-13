@@ -1,8 +1,8 @@
-export class QuizUser{
-    QuizUserId: string;
+export class QuizUser {
+    QuizUserId: string | null | undefined;
     IsAdmin: boolean;
-    Password: string;
-    Avatar: string;
+    Password: string | undefined;
+    Avatar: string | undefined;
     isOnline: boolean;
 
     /**
@@ -15,13 +15,13 @@ export class QuizUser{
 }
 
 export class QuizUserCheck {
-    QuizUserId: string;
+    QuizUserId: string | undefined | null;
     Checked: boolean;
 
     /**
      *
      */
-    constructor(id: string,checked) {
+    constructor(id: string | undefined | null, checked: boolean) {
         this.QuizUserId = id;
         this.Checked = checked;
     }

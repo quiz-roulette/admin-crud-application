@@ -2,7 +2,7 @@ export class Question {
     QuestionId: number;
     Text: string;
     CategoryName: string;
-    ImageUrl: string;
+    ImageUrl: string | null;
 
     constructor() {
         this.QuestionId = 0;

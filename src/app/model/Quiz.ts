@@ -1,9 +1,9 @@
 export class Quiz{
-    QuizId: string;
-    CategoryName: string;
-    AdminId: string;
-    HasEnded: boolean;
-    StartDateTime: Date;
-    EndDateTime: Date;
-    GroupName: string;
+    QuizId: string | undefined | undefined;
+    CategoryName: string | undefined;
+    AdminId: string | undefined;
+    HasEnded: boolean | undefined;
+    StartDateTime: Date | undefined;
+    EndDateTime: Date | undefined;
+    GroupName: string | undefined;
 }
