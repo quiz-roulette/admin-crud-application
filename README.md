@@ -23,6 +23,12 @@ pushing to docker hub:
 `docker push quizroulette/admin-crud-app:v2.0.0`
 
 
+### Versions
+
+`node -v` : `v18.14.0`
+
+`npm -v` : `9.3.1`
+
 
 #### Other info:
 
