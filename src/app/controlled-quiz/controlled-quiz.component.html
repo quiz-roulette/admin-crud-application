@@ -102,7 +102,7 @@
                     <th>User</th>
                     <th>Score</th>
                 </tr>
-                <tr class="info" *ngFor="let item of overallResults | limit: '0:3'; let i = index;">
+                <tr class="info" *ngFor="let item of overallResults; let i = index;">
                     <td>{{i+1}}</td>
                     <td>{{item.QuizUserId}}</td>
                     <td>{{item.Score}}</td>

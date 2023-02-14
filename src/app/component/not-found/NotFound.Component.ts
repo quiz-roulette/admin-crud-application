@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
     templateUrl: 'NotFound.component.html'
 })
 export class NotFoundComponent implements OnInit {
-    message: string;
+    message: any;
     constructor() { }
     ngOnInit() { 
         this.message = "Not Found"

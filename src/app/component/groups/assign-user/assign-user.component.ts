@@ -14,7 +14,7 @@ import { HttpEventType } from '@angular/common/http';
 
 
 
-export class AssignUserComponent implements OnInit, OnDestroy {
+export class AssignUserComponent implements OnInit {
     quizUsers: QuizUser[];
     checkedQuizUsers: QuizUser[];
     checkedList: string[];
@@ -93,9 +93,5 @@ export class AssignUserComponent implements OnInit, OnDestroy {
 
     updateResult(result: Result) {
         this.result = result;
-    }
-
-    ngOnDestroy() {
-        this.sub.unsubscribe();
     }
 }

@@ -6,7 +6,6 @@ import { HTTPService } from '../service/http.service';
 import { HttpEventType } from '@angular/common/http';
 
 @Component({
-    moduleId: module.id,
     selector: 'authentication',
     templateUrl: 'authentication.component.html',
     styleUrls: ['authentication.component.css']

@@ -2,7 +2,6 @@ import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
 import { Result } from '../../model/Result';
 
 @Component({
-    moduleId: module.id,
     selector: 'status',
     templateUrl: 'status.component.html',
     styleUrls: ['status.component.css']

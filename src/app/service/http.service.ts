@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { QuestionWrapper } from '../model/questionWrapper';
 import { Question } from '../model/question';
 import { Choice } from '../model/choice';
@@ -167,7 +165,7 @@ export class HTTPService {
         });
     }
 
-    assignCustomGroupsToUser(groups: string | undefined | null[], user: string | undefined | null): any {
+    assignCustomGroupsToUser(groups: any, user: string | undefined | null): any {
         return new Promise<boolean>(resolve => {
             resolve(true);
         });

@@ -3,8 +3,8 @@ import { Result } from '../../../model/Result';
 import { QuizUser, QuizUserCheck } from '../../../model/QuizUser';
 import { Group, GroupCheck } from '../../../model/Group';
 import { HTTPService } from '../../../service/http.service';
-import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
     selector: 'assign-group',
@@ -14,32 +14,36 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 
 
 
-export class AssignGroupComponent implements OnInit, OnDestroy {
+export class AssignGroupComponent implements OnInit {
     groups: Group[];
     checkedGroupsForUser: Group[];
     checkedList: string[];
     userGroups: GroupCheck[];
     result: Result;
-    private sub: Subscription;
-    public quizUserId: string;
+    public quizUserId!: string;
 
     ngOnInit() {
-        // assign the subscription to a variable so we can unsubscribe to prevent memory leaks
-        this.sub = this.route.params.subscribe((params: Params) => {
-            this.quizUserId = params['quizuserid'];
-        });
+        this.quizUserId = this.route.snapshot.paramMap.get("quizuserid")!
 
         this.result.updateInfo("Getting groups...")
-        this.http.getAllGroups().then((res) => {
-            this.groups = res;
-            // console.log(this.groups);
-            this.result.updateInfo("Getting Users from this group...")
-            this.http.getGroupsForUser(this.quizUserId).then((res1) => {
-                
-                this.checkedGroupsForUser = res1;
-                // console.log(this.checkedGroupsForUser)
-                this.setCheckedValues();
-            });
+        this.http.getAllGroups().subscribe((resultEvent: any) => {
+            console.log("getting all quiz.. ", resultEvent)
+            if (resultEvent.type === HttpEventType.Response) {
+                var res = resultEvent.body;
+
+                this.groups = res;
+                // console.log(this.groups);
+                this.result.updateInfo("Getting Users from this group...")
+                this.http.getGroupsForUser(this.quizUserId).subscribe((resultEvent1: any) => {
+                    console.log("getting all quiz.. ", resultEvent)
+                    if (resultEvent1.type === HttpEventType.Response) {
+                        var res1 = resultEvent1.body;
+                        this.checkedGroupsForUser = res1;
+                        // console.log(this.checkedGroupsForUser)
+                        this.setCheckedValues();
+                    }
+                });
+            }
         });
     }
 
@@ -51,30 +55,32 @@ export class AssignGroupComponent implements OnInit, OnDestroy {
         this.userGroups = [];
     }
 
-    onCheckboxChange(option, event) {
-        var newCheckUser = [];
+    onCheckboxChange(option: any, event: any) {
+        var newCheckUser: any = [];
         this.userGroups.forEach((el) => {
             if (el.Name === option.Name) {
-                newCheckUser.push(new GroupCheck(el.Name,event.target.checked));
+                newCheckUser.push(new GroupCheck(el.Name, event.target.checked));
             }
-            else{
-                newCheckUser.push(new GroupCheck(el.Name,el.Checked));
+            else {
+                newCheckUser.push(new GroupCheck(el.Name, el.Checked));
             }
         });
         this.userGroups = newCheckUser;
     }
 
-    assign(){
+    assign() {
         this.result.updateInfo("updating database...");
         var groups: Group[] = [];
-        this.userGroups.forEach((el) => {
-            if(el.Checked) groups.push(el.Name);
+        this.userGroups.forEach((el: any) => {
+            if (el.Checked) groups.push(el.Name);
         })
-        this.http.assignCustomGroupsToUser(groups,this.quizUserId).then((res) => {
-            this.result.updateSuccess(true);
-        }).catch((err) => {
-            this.result.updateError("Error!");
-        });
+        this.http.assignCustomGroupsToUser(groups, this.quizUserId).subscribe((resultEvent: any) => {
+            console.log("assigning custom groups to users.. ", resultEvent)
+            if (resultEvent.type === HttpEventType.Response) {
+                var data = resultEvent.body;
+                this.result.updateSuccess(true);
+            }
+        })
     }
 
     setCheckedValues() {
@@ -95,9 +101,5 @@ export class AssignGroupComponent implements OnInit, OnDestroy {
 
     updateResult(result: Result) {
         this.result = result;
-    }
-
-    ngOnDestroy() {
-        this.sub.unsubscribe();
     }
 }
