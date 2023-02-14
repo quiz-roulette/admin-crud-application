@@ -26,24 +26,18 @@ export class UserComponent implements OnInit {
         this.result = new Result();
         this.getAllUsers();
 
-        this.httpService.getAllGroups().subscribe((resultEvent: any) => {
-            console.log("get all groups ... ", resultEvent)
-            if (resultEvent.type === HttpEventType.Response) {
-                var res = resultEvent.body;
-                this.groups = res;
-            }
+        this.httpService.getAllGroups().subscribe((res: any) => {
+            this.groups = res;
         });
     }
 
     getAllUsers() {
         this.result.updateInfo("Getting Users...")
-        this.httpService.getAllQuizUsers().then((resultEvent: any) => {
-            console.log("get all quiz users ... ", resultEvent)
-            if (resultEvent.type === HttpEventType.Response) {
-                var result = resultEvent.body;
-                this.quizUsers = result;
-                this.result.updateSuccess(true);
-            }
+        this.httpService.getAllQuizUsers().subscribe((result: any) => {
+            console.log("get all quiz users ... ", result)
+            this.quizUsers = result;
+            this.result.updateSuccess(true);
+
         })
     }
 

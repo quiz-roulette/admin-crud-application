@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTPService } from '../service/http.service';
 import { QuestionWrapper } from '../model/questionWrapper';
-import { AzureService } from '../service/azure.service';
 import { Category } from '../model/category';
 import { Result } from '../model/Result';
 import * as $ from 'jquery';
 import { Router } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
+import { data } from 'jquery';
+import { forkJoin } from 'rxjs';
 
 @Component({
     selector: 'question',
@@ -22,7 +23,7 @@ export class QuestionComponent implements OnInit {
     result: Result;
     searchText: string;
 
-    constructor(private httpService: HTTPService, private azureService: AzureService, private router: Router) {
+    constructor(private httpService: HTTPService, private router: Router) {
         this.isTrue = true;
         this.result = new Result();
         this.searchText = "";
@@ -32,6 +33,7 @@ export class QuestionComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log("gonna get questions")
         this.result.updateInfo("Getting questions...");
         this.getAllQuestions();
 
@@ -41,11 +43,30 @@ export class QuestionComponent implements OnInit {
 
     getAllQuestions() {
         this.result.updateInfo("Getting questions...");
-        this.httpService.getAllQuestionWrapper().then((data) => {
-            this.questionWrappers = data;
-            this.result.updateSuccess(true);
-        }).catch((err) => {
-            this.result.updateError("Error!");
+
+        let questionWrappers = new Array<QuestionWrapper>();
+
+        forkJoin([this.httpService.getAllQuestions(), this.httpService.getAllChoices(), this.httpService.getAllCorrectChoices()]).subscribe(([
+            questionsEvent, choicesEvent, correctChoicesEvent
+        ]) => {
+
+            var questions = <any>questionsEvent;
+            var choices = <any>choicesEvent;
+            var correctChoices = <any>correctChoicesEvent;
+            console.log(questions);
+
+            questions.forEach((element: any) => {
+                let questionWrapper = new QuestionWrapper();
+                questionWrapper.QuestionId = element.QuestionId;
+                questionWrapper.Text = element.Text;
+                questionWrapper.CategoryName = element.CategoryName;
+                questionWrapper.ImageUrl = element.ImageUrl;
+                questionWrapper.choice = choices.filter((el: any) => el.QuestionId == element.QuestionId);
+                questionWrapper.correctChoice = correctChoices.find((el: any) => el.QuestionId == questionWrapper.QuestionId);
+                questionWrappers.push(questionWrapper);
+            });
+
+            this.questionWrappers = questionWrappers;
         });
     }
 

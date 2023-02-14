@@ -27,20 +27,24 @@ export class HTTPService {
         this.options = {
             headers: new HttpHeaders({
                 'ZUMO-API-VERSION': '2.0.0',
-                'authorization': localStorage.getItem('user')!,
-                'admin': localStorage.getItem('user')!,
+                'authorization': this.getUserFromLocal(),
+                'admin': this.getUserFromLocal(),
                 'SIM': "true",
                 'observe': 'body'
             })
         };
     }
 
+    private getUserFromLocal(): string {
+        return localStorage.getItem('user') ?? '';
+    }
+
     updateOptions() {
         this.options = {
             headers: new HttpHeaders({
                 'ZUMO-API-VERSION': '2.0.0',
-                'authorization': localStorage.getItem('user')!,
-                'admin': localStorage.getItem('user')!,
+                'authorization': this.getUserFromLocal(),
+                'admin': this.getUserFromLocal(),
                 'SIM': "true"
             })
         };
@@ -69,45 +73,6 @@ export class HTTPService {
 
     getAllCategories() {
         return this.http.get(`${this.AzureUrl}/api/category`, this.options);
-    }
-
-    /**
-     * Returns questionWrapper that consisits of Question,Choices and CorrectChoice.
-     */
-    async getAllQuestionWrapper(): Promise<QuestionWrapper[]> {
-        let questionWrappers = new Array<QuestionWrapper>();
-        let questions: any = [];
-        let choices: any = [];
-        let correctChoices: any = [];
-
-        await forkJoin([this.getAllQuestions(), this.getAllChoices(), this.getAllCorrectChoices()]).subscribe(([
-            questionsEvent, choicesEvent, correctChoicesEvent
-        ]) => {
-            if (questionsEvent.type === HttpEventType.Response &&
-                choicesEvent.type === HttpEventType.Response &&
-                correctChoicesEvent.type === HttpEventType.Response) {
-                questions = questionsEvent.body;
-                choices = choicesEvent.body;
-                correctChoices = correctChoicesEvent.body;
-            } else {
-                return;
-            }
-
-            questions.forEach((element: any) => {
-                let questionWrapper = new QuestionWrapper();
-                questionWrapper.QuestionId = element.QuestionId;
-                questionWrapper.Text = element.Text;
-                questionWrapper.CategoryName = element.CategoryName;
-                questionWrapper.ImageUrl = element.ImageUrl;
-                questionWrapper.choice = choices.filter((el: any) => el.QuestionId == element.QuestionId);
-                questionWrapper.correctChoice = correctChoices.find((el: any) => el.QuestionId == questionWrapper.QuestionId);
-                questionWrappers.push(questionWrapper);
-            });
-        });
-
-        return new Promise<QuestionWrapper[]>(resolve => {
-            resolve(questionWrappers);
-        });
     }
 
     /**

@@ -19,18 +19,17 @@ export class UserGuard implements CanActivate {
         this.loader$.next(true);
         return new Promise((resolve, reject) => {
             if (localStorage.getItem('user') && localStorage.getItem('password')) {
-                this.httpService.Login(localStorage.getItem('user'), localStorage.getItem('password')).subscribe((resultEvent: any) => {
-                    if (resultEvent.type === HttpEventType.Response) {
-                        var res = resultEvent.body;
-                        this.loader$.next(false);
-                        if (res == true) {
-                            resolve(true);
-                        }
-                        else {
-                            this.router.navigate(['/login']);
-                            resolve(false);
-                        }
+                this.httpService.Login(localStorage.getItem('user'), localStorage.getItem('password')).subscribe((res: any) => {
+
+                    this.loader$.next(false);
+                    if (res == true) {
+                        resolve(true);
                     }
+                    else {
+                        this.router.navigate(['/login']);
+                        resolve(false);
+                    }
+
                 })
             }
             else {

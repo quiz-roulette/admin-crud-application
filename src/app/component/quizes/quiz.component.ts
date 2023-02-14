@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTPService } from '../../service/http.service';
-import { QuestionWrapper } from '../../model/questionWrapper';
-import { AzureService } from '../../service/azure.service';
 import { Category } from '../../model/category';
 import { Result } from '../../model/Result';
 import * as $ from 'jquery';
@@ -26,7 +24,6 @@ export class QuizComponent implements OnInit {
 
     constructor(
         private httpService: HTTPService,
-        private azureService: AzureService,
         private socket: Socket,
         private router: Router) {
         this.isTrue = true;
@@ -45,19 +42,16 @@ export class QuizComponent implements OnInit {
 
     getAllQuiz() {
         this.result.updateInfo("Getting Quiz...");
-        this.httpService.getAllQuiz().subscribe((resultEvent: any) => {
-            console.log("getting all quiz.. ", resultEvent)
-            if (resultEvent.type === HttpEventType.Response) {
-                var data = resultEvent.body;
-                data.forEach((el: any) => {
-                    if (el.StartDateTime != null) {
-                        el.StartDateTime = new Date(el.StartDateTime);
-                    }
-                })
-                // console.log(data);
-                this.quizes = data;
-                this.result.updateSuccess(true);
-            }
+        this.httpService.getAllQuiz().subscribe((data: any) => {
+            console.log("getting all quiz.. ", data)
+            data.forEach((el: any) => {
+                if (el.StartDateTime != null) {
+                    el.StartDateTime = new Date(el.StartDateTime);
+                }
+            })
+            // console.log(data);
+            this.quizes = data;
+            this.result.updateSuccess(true);
         })
     }
 

@@ -43,10 +43,7 @@ export class AuthenticationComponent implements OnInit {
 
     login() {
         this.result.updateInfo("Logging in..")
-        this.httpService.Login(this.quizUser.QuizUserId, this.quizUser.Password).subscribe(resultEvent => {
-            if (resultEvent.type === HttpEventType.Response) {
-                var result = resultEvent.body;
-
+        this.httpService.Login(this.quizUser.QuizUserId, this.quizUser.Password).subscribe((result: any) => {
                 if (result == true) {
                     this.httpService.updateOptions();
                     localStorage.setItem('user', this.quizUser.QuizUserId!);
@@ -54,8 +51,8 @@ export class AuthenticationComponent implements OnInit {
                     this.result.updateSuccess(true);
                     this.router.navigateByUrl('/questions');
                 }
-            }
-        }, error => this.result.updateError("Authentication Failed"), () => console.log("completed"));
+        }, error => console.log("some error", error) //this.result.updateError("Authentication Failed")
+        , () => console.log("completed"));
     }
 
     updateResult(result: any) {

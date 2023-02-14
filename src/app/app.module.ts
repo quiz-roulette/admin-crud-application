@@ -4,9 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HTTPService } from './service/http.service';
-import { QuestionComponent } from './questions/question.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { AzureService } from './service/azure.service';
 import { StatusComponent } from './component/status/status.component';
 import {AppRoutingModule, routableComponents } from './app-routing.module';
 import { AddQuestionComponent } from './questions/add-question/add-question.component';
@@ -41,7 +39,6 @@ const config: SocketIoConfig = { url: 'https://axperience.herokuapp.com/', optio
   ],
   providers: [
     HTTPService,
-    AzureService,
     UserGuard],
   bootstrap: [AppComponent]
 })
