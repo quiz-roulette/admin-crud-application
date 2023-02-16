@@ -11,16 +11,16 @@
 
 build image:
 
-`docker build -t quizroulette/admin-crud-app:v2.1.0 .`
+`docker build -t quizroulette/admin-crud-app:v2.2.0 .`
 
 
 running locally:
 
-`docker run -p 4200:80 -td quizroulette/admin-crud-app:v2.1.0`
+`docker run -p 4200:80 -td quizroulette/admin-crud-app:v2.2.0`
 
 pushing to docker hub:
 
-`docker push quizroulette/admin-crud-app:v2.1.0`
+`docker push quizroulette/admin-crud-app:v2.2.0`
 
 
 ### Versions
