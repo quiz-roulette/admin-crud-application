@@ -10,12 +10,13 @@ import { Category } from '../model/category';
 
 @Injectable()
 export class HTTPService {
-    private AzureUrl = "https://axperienceapp.azurewebsites.net";
+    private AzureUrl = "https://axperienceapp.azurewebsites.net/api";
+    private KubernetesWorld = "http://localhost:8080/legacy"
     options: any;
 
 
     Login(quizUserId: any, password: any) {
-        return this.http.get<boolean>(`${this.AzureUrl}/api/authenticate?userId=${quizUserId}&userPassword=${password}&isAdmin=${true}`, this.options);
+        return this.http.get<boolean>(`${this.KubernetesWorld}/authenticate?userId=${quizUserId}&userPassword=${password}&isAdmin=${true}`, this.options);
     }
 
     getAllQuizUsers(): any {
@@ -54,25 +55,26 @@ export class HTTPService {
      * returns all the questions from the database
      */
     getAllQuestions() {
-        return this.http.get<Question[]>(`${this.AzureUrl}/api/question`, this.options);
+        return this.http.get<Question[]>(`${this.KubernetesWorld}/question`, this.options);
     }
 
     /**
      * returns all the choices from the database
      */
     getAllChoices() {
-        return this.http.get<Choice[]>(`${this.AzureUrl}/api/choice`, this.options);
+        return this.http.get<Choice[]>(`${this.KubernetesWorld}/choice`, this.options);
     }
 
     /**
      * returns all the correctChoices from the database
      */
     getAllCorrectChoices() {
-        return this.http.get<CorrectChoice[]>(`${this.AzureUrl}/api/correctChoice`, this.options);
+        return this.http.get<CorrectChoice[]>(`${this.KubernetesWorld}/correctChoice`, this.options);
     }
 
+
     getAllCategories() {
-        return this.http.get(`${this.AzureUrl}/api/category`, this.options);
+        return this.http.get(`${this.KubernetesWorld}/category`, this.options);
     }
 
     /**
@@ -84,6 +86,7 @@ export class HTTPService {
      */
     addQuestionWrapper(questionWrapper: QuestionWrapper): Promise<QuestionWrapper> {
         console.log("Lets add a question in backend ", questionWrapper);
+        this.http.post(`${this.KubernetesWorld}/questionwrapper`, questionWrapper, this.options);
         return new Promise<QuestionWrapper>(resolve => {
             resolve(questionWrapper);
         });
@@ -96,19 +99,19 @@ export class HTTPService {
      * it adds the text and category to the database
      */
     addQuestion(text: string | undefined | null, category: string | undefined | null, imageUrl: string | undefined | null) {
-        return this.http.post<Question>(`${this.AzureUrl}/api/question`, { Text: text, CategoryName: category, ImageUrl: imageUrl }, this.options);
+        return this.http.post<Question>(`${this.KubernetesWorld}/question`, { Text: text, CategoryName: category, ImageUrl: imageUrl }, this.options);
     }
 
     addChoice(questionId: any, text: any) {
-        return this.http.post<Choice>(`${this.AzureUrl}/api/choice`, { Text: text, QuestionId: questionId }, this.options);
+        return this.http.post<Choice>(`${this.KubernetesWorld}/choice`, { Text: text, QuestionId: questionId }, this.options);
     }
 
     addUser(user: QuizUser) {
-        return this.http.post(`${this.AzureUrl}/api/quizuser`, user, this.options);
+        return this.http.post(`${this.KubernetesWorld}/quizuser`, user, this.options);
     }
 
     addCategory(category: Category): any {
-        return this.http.post<Category>(`${this.AzureUrl}/api/category`, category, this.options);
+        return this.http.post<Category>(`${this.KubernetesWorld}/category`, category, this.options);
     }
 
     assignUserToGroup(groupname: string | undefined | null, userid: string | undefined | null) {
@@ -188,45 +191,45 @@ export class HTTPService {
      * @example httpService.deleteQuestion(1).then((data) => { // console.log("deleted Succesfully")});
      */
     deleteQuestion(questionId: any) {
-        return this.http.patch(`${this.AzureUrl}/api/question`, { QuestionId: questionId, IsDelete: true }, this.options);
+        return this.http.patch(`${this.KubernetesWorld}/question`, { QuestionId: questionId, IsDelete: true }, this.options);
     }
 
     deleteUser(userId: string | undefined | null) {
-        return this.http.delete(`${this.AzureUrl}/api/quizUser?QuizUserId=${userId}`, this.options);
+        return this.http.delete(`${this.KubernetesWorld}/quizUser?QuizUserId=${userId}`, this.options);
     }
 
     deleteCategory(categoryName: any): any {
-        return this.http.delete(`${this.AzureUrl}/api/category?CategoryName=${categoryName}`, this.options);
+        return this.http.delete(`${this.KubernetesWorld}/category?CategoryName=${categoryName}`, this.options);
     }
 
     addQuiz(quiz: any): any {
-        return this.http.post(`${this.AzureUrl}/api/quiz`, quiz, this.options);
+        return this.http.post(`${this.KubernetesWorld}/quiz`, quiz, this.options);
     }
 
     getAllQuiz(): any {
-        return this.http.get(`${this.AzureUrl}/api/quiz`, this.options);
+        return this.http.get(`${this.KubernetesWorld}/quiz`, this.options);
     }
 
     endQuiz(id: any): any {
         var newObj = { QuizId: id, HasEnded: true, EndDateTime: new Date() };
-        return this.http.patch(`${this.AzureUrl}/api/quiz`, newObj, this.options);
+        return this.http.patch(`${this.KubernetesWorld}/quiz`, newObj, this.options);
     }
 
     addOneTimeQuiz(quiz: any): any {
-        return this.http.post(`${this.AzureUrl}/api/quiz_with_tokenised`, quiz, this.options);
+        return this.http.post(`${this.KubernetesWorld}/quiz_with_tokenised`, quiz, this.options);
     }
 
     getAllOneTimeQuiz(): any {
-        return this.http.get(`${this.AzureUrl}/api/quiz_with_tokenised`, this.options);
+        return this.http.get(`${this.KubernetesWorld}/quiz_with_tokenised`, this.options);
     }
 
     endOneTimeQuiz(id: any): any {
         var newObj = { QuizId: id, HasEnded: true, EndDateTime: new Date() };
-        return this.http.patch(`${this.AzureUrl}/api/quiz_with_tokenised`, newObj, this.options);
+        return this.http.patch(`${this.KubernetesWorld}/quiz_with_tokenised`, newObj, this.options);
     }
 
     getAllQuizLog(quizname: any) {
-        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizname}`, this.options);
+        return this.http.get(`${this.KubernetesWorld}/quizlog?QuizId=${quizname}`, this.options);
     }
 
     getQuizUser(quizuserId: any): any {
@@ -234,11 +237,11 @@ export class HTTPService {
     }
 
     getCategoryQuestionCount(categoryName: string | undefined | null): any {
-        return this.http.get(`${this.AzureUrl}/api/getQuestionCountForCategory?CategoryName=${categoryName}`, this.options);
+        return this.http.get(`${this.KubernetesWorld}/getQuestionCountForCategory?CategoryName=${categoryName}`, this.options);
     }
 
     setUpControlledQuiz(catName: any) {
-        return this.http.post(`${this.AzureUrl}/api/setupControlledQuiz`, { CategoryName: catName }, this.options);
+        return this.http.post(`${this.KubernetesWorld}/setupControlledQuiz`, { CategoryName: catName }, this.options);
     }
 
     getQuizDataByQuizId(quizId: string | undefined | null) {
@@ -246,7 +249,7 @@ export class HTTPService {
     }
 
     getQuizLogByQuizId(quizId: string | undefined | null) {
-        return this.http.get(`${this.AzureUrl}/api/quizlog?QuizId=${quizId}`, this.options);
+        return this.http.get(`${this.KubernetesWorld}/quizlog?QuizId=${quizId}`, this.options);
     }
 
     private extractData(res: any) {

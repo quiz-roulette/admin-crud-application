@@ -54,6 +54,8 @@ export class QuestionComponent implements OnInit {
             var choices = <any>choicesEvent;
             var correctChoices = <any>correctChoicesEvent;
             console.log(questions);
+            console.log(choices);
+            console.log(correctChoices);
 
             questions.forEach((element: any) => {
                 let questionWrapper = new QuestionWrapper();
@@ -63,8 +65,13 @@ export class QuestionComponent implements OnInit {
                 questionWrapper.ImageUrl = element.ImageUrl;
                 questionWrapper.choice = choices.filter((el: any) => el.QuestionId == element.QuestionId);
                 questionWrapper.correctChoice = correctChoices.find((el: any) => el.QuestionId == questionWrapper.QuestionId);
-                questionWrappers.push(questionWrapper);
+                if(questionWrapper.correctChoice != undefined)  {
+                    questionWrappers.push(questionWrapper);
+                }
+                
             });
+
+            console.log(questionWrappers)
 
             this.questionWrappers = questionWrappers;
         });
